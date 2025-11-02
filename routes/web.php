@@ -1,5 +1,9 @@
 <?php
 
+use App\Http\Controllers\CandidateController;
+use App\Http\Controllers\InterviewController;
+use App\Http\Controllers\JobOfferController;
+use App\Http\Controllers\JobPostingController;
 use App\Http\Controllers\Settings;
 use Illuminate\Support\Facades\Route;
 
@@ -7,7 +11,31 @@ Route::get('/', function () {
     return view('welcome');
 })->name('home');
 
-Route::view('dashboard', 'dashboard')
+Route::get('dashboard', function () {
+    $stats = [];
+
+    if (auth()->check() && auth()->user()->can('view job postings')) {
+        $stats['activeJobPostings'] = \App\Models\JobPosting::where('is_active', true)->count();
+        $stats['totalJobPostings'] = \App\Models\JobPosting::count();
+    }
+
+    if (auth()->check() && auth()->user()->can('view candidates')) {
+        $stats['newCandidates'] = \App\Models\Candidate::where('status', 'new')->count();
+        $stats['totalCandidates'] = \App\Models\Candidate::count();
+    }
+
+    if (auth()->check() && auth()->user()->can('view interviews')) {
+        $stats['upcomingInterviews'] = \App\Models\Interview::where('scheduled_at', '>', now())->count();
+        $stats['totalInterviews'] = \App\Models\Interview::count();
+    }
+
+    if (auth()->check() && auth()->user()->can('view job offers')) {
+        $stats['sentOffers'] = \App\Models\JobOffer::where('status', 'sent')->count();
+        $stats['totalOffers'] = \App\Models\JobOffer::count();
+    }
+
+    return view('dashboard', compact('stats'));
+})
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
 
@@ -18,6 +46,31 @@ Route::middleware(['auth'])->group(function () {
     Route::get('settings/password', [Settings\PasswordController::class, 'edit'])->name('settings.password.edit');
     Route::put('settings/password', [Settings\PasswordController::class, 'update'])->name('settings.password.update');
     Route::get('settings/appearance', [Settings\AppearanceController::class, 'edit'])->name('settings.appearance.edit');
+});
+
+// Recruitment Management Routes
+Route::middleware(['auth', 'verified', 'role:administrator|manager'])->group(function () {
+    // Job Postings
+    Route::resource('job-postings', JobPostingController::class);
+
+    // Candidates
+    Route::resource('candidates', CandidateController::class);
+    Route::patch('candidates/{candidate}/status', [CandidateController::class, 'updateStatus'])
+        ->name('candidates.update-status');
+
+    // Interviews
+    Route::resource('interviews', InterviewController::class);
+});
+
+// Job Offers (Manager only)
+Route::middleware(['auth', 'verified', 'role:manager'])->group(function () {
+    Route::resource('job-offers', JobOfferController::class);
+    Route::get('job-offers/{jobOffer}/preview', [JobOfferController::class, 'preview'])
+        ->name('job-offers.preview');
+    Route::post('job-offers/{jobOffer}/send', [JobOfferController::class, 'send'])
+        ->name('job-offers.send');
+    Route::get('job-offers/{jobOffer}/download', [JobOfferController::class, 'download'])
+        ->name('job-offers.download');
 });
 
 require __DIR__.'/auth.php';

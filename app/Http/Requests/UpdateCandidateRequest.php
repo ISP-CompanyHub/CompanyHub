@@ -1,0 +1,34 @@
+<?php
+
+namespace App\Http\Requests;
+
+use Illuminate\Foundation\Http\FormRequest;
+
+class UpdateCandidateRequest extends FormRequest
+{
+    /**
+     * Determine if the user is authorized to make this request.
+     */
+    public function authorize(): bool
+    {
+        return $this->user()->can('edit candidates');
+    }
+
+    /**
+     * Get the validation rules that apply to the request.
+     *
+     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     */
+    public function rules(): array
+    {
+        return [
+            'job_posting_id' => ['required', 'exists:job_postings,id'],
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'email', 'max:255'],
+            'phone' => ['nullable', 'string', 'max:255'],
+            'resume_url' => ['nullable', 'string', 'max:255'],
+            'status' => ['nullable', 'string', 'in:new,reviewing,interview_scheduled,interviewed,offer_sent,accepted,rejected,withdrawn'],
+            'notes' => ['nullable', 'string'],
+        ];
+    }
+}

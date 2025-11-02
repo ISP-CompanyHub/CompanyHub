@@ -13,11 +13,48 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
+        // Seed roles and permissions first
+        $this->call(RolePermissionSeeder::class);
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-        ]);
+        // Create test users with different roles
+        $admin = User::firstOrCreate(
+            ['email' => 'admin@companyhub.com'],
+            [
+                'name' => 'Admin User',
+                'password' => bcrypt('password'),
+                'email_verified_at' => now(),
+            ]
+        );
+        $admin->syncRoles(['administrator']);
+
+        $manager = User::firstOrCreate(
+            ['email' => 'manager@companyhub.com'],
+            [
+                'name' => 'Manager User',
+                'password' => bcrypt('password'),
+                'email_verified_at' => now(),
+            ]
+        );
+        $manager->syncRoles(['manager']);
+
+        $employee = User::firstOrCreate(
+            ['email' => 'employee@companyhub.com'],
+            [
+                'name' => 'Employee User',
+                'password' => bcrypt('password'),
+                'email_verified_at' => now(),
+            ]
+        );
+        $employee->syncRoles(['employee']);
+
+        // Original test user
+        User::firstOrCreate(
+            ['email' => 'test@example.com'],
+            [
+                'name' => 'Test User',
+                'password' => bcrypt('password'),
+                'email_verified_at' => now(),
+            ]
+        );
     }
 }

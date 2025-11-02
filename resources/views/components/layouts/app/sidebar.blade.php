@@ -9,26 +9,40 @@
                             <x-layouts.sidebar-link href="{{ route('dashboard') }}" icon='fas-house'
                                 :active="request()->routeIs('dashboard*')">Dashboard</x-layouts.sidebar-link>
 
-                            <!-- Example two level -->
-                            <x-layouts.sidebar-two-level-link-parent title="Example two level" icon="fas-house"
-                                :active="request()->routeIs('two-level*')">
-                                <x-layouts.sidebar-two-level-link href="#" icon='fas-house'
-                                    :active="request()->routeIs('two-level*')">Child</x-layouts.sidebar-two-level-link>
-                            </x-layouts.sidebar-two-level-link-parent>
+                            <!-- Recruitment -->
+                            @canany(['view job postings', 'view candidates', 'view interviews', 'view job offers'])
+                                <x-layouts.sidebar-two-level-link-parent title="Recruitment" icon="fas-users"
+                                    :active="request()->routeIs(
+                                        'job-postings.*',
+                                        'candidates.*',
+                                        'interviews.*',
+                                        'job-offers.*',
+                                    )">
 
-                            <!-- Example three level -->
-                            <x-layouts.sidebar-two-level-link-parent title="Example three level" icon="fas-house"
-                                :active="request()->routeIs('three-level*')">
-                                <x-layouts.sidebar-two-level-link href="#" icon='fas-house'
-                                    :active="request()->routeIs('three-level*')">Single Link</x-layouts.sidebar-two-level-link>
+                                    @can('view job postings')
+                                        <x-layouts.sidebar-two-level-link href="{{ route('job-postings.index') }}"
+                                            icon='fas-briefcase' :active="request()->routeIs('job-postings.*')">Job
+                                            Postings</x-layouts.sidebar-two-level-link>
+                                    @endcan
 
-                                <x-layouts.sidebar-three-level-parent title="Third Level" icon="fas-house"
-                                    :active="request()->routeIs('three-level*')">
-                                    <x-layouts.sidebar-three-level-link href="#" :active="request()->routeIs('three-level*')">
-                                        Third Level Link
-                                    </x-layouts.sidebar-three-level-link>
-                                </x-layouts.sidebar-three-level-parent>
-                            </x-layouts.sidebar-two-level-link-parent>
+                                    @can('view candidates')
+                                        <x-layouts.sidebar-two-level-link href="{{ route('candidates.index') }}"
+                                            icon='fas-user-tie' :active="request()->routeIs('candidates.*')">Candidates</x-layouts.sidebar-two-level-link>
+                                    @endcan
+
+                                    @can('view interviews')
+                                        <x-layouts.sidebar-two-level-link href="{{ route('interviews.index') }}"
+                                            icon='fas-calendar-check'
+                                            :active="request()->routeIs('interviews.*')">Interviews</x-layouts.sidebar-two-level-link>
+                                    @endcan
+
+                                    @can('view job offers')
+                                        <x-layouts.sidebar-two-level-link href="{{ route('job-offers.index') }}"
+                                            icon='fas-file-contract' :active="request()->routeIs('job-offers.*')">Job
+                                            Offers</x-layouts.sidebar-two-level-link>
+                                    @endcan
+                                </x-layouts.sidebar-two-level-link-parent>
+                            @endcanany
                         </ul>
                     </nav>
                 </div>
