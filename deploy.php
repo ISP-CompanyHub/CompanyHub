@@ -60,7 +60,7 @@ task('deploy:npm_install', function () {
 // Build frontend assets
 desc('Build frontend assets');
 task('deploy:npm_build', function () {
-    run('cd {{release_path}} && npm build');
+    run('cd {{release_path}} && npm run build');
 });
 
 // Deployment task
