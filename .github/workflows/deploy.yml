@@ -34,16 +34,6 @@ jobs:
       - name: Install dependencies
         run: composer install --no-interaction --no-progress --no-suggest --prefer-dist
 
-      - name: Create GitHub Deployment
-        id: deployment
-        uses: bobheadxi/deployments@v1
-        with:
-          step: start
-          token: ${{ secrets.GITHUB_TOKEN }}
-          env: production
-          ref: ${{ github.ref_name }}
-          desc: 'Deploying to production'
-
       - name: Run deploy command
         id: deploy
         continue-on-error: true
@@ -51,13 +41,3 @@ jobs:
         with:
           private-key: ${{ secrets.DEPLOY_PRIVATE_KEY }}
           dep: ${{ inputs.action || 'deploy' }} type=production
-
-      - name: Set deployment status
-        if: always()
-        uses: bobheadxi/deployments@v1
-        with:
-          step: finish
-          token: ${{ secrets.GITHUB_TOKEN }}
-          env: production
-          deployment_id: ${{ steps.deployment.outputs.deployment_id }}
-          status: ${{ steps.deploy.outcome == 'success' && 'success' || 'failure' }}
