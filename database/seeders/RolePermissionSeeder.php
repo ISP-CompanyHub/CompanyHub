@@ -50,6 +50,13 @@ class RolePermissionSeeder extends Seeder
             'edit documents',
             'delete documents',
 
+            // Employee Profiles and Departments
+            'view profile',
+            'edit departments',
+            'view employees',
+            'edit profile',
+            'create profile',
+            'generate company structure'
         ];
 
         foreach ($permissions as $permission) {
@@ -67,6 +74,8 @@ class RolePermissionSeeder extends Seeder
             'create documents',
             'edit documents',
             'delete documents',
+            'view profile',
+            'generate company structure'
         ]);
 
         // System Administrator role - full CRUD on job postings, candidates, and interviews
@@ -90,6 +99,10 @@ class RolePermissionSeeder extends Seeder
             'create documents',
             'edit documents',
             'delete documents',
+            'edit departments',
+            'view employees',
+            'edit profile',
+            'create profile',
         ]);
 
         // Manager role - can do everything including sending job offers

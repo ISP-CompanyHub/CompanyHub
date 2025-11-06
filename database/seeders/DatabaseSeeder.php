@@ -51,6 +51,7 @@ class DatabaseSeeder extends Seeder
                 'department_id' => Department::query()->where('name', 'Sales')->first()->id,
             ]
         );
+        Department::query()->where('name', 'Sales')->first()->update(['department_lead_id' => $manager->id]);
         $manager->syncRoles(['manager']);
 
         $employee = User::firstOrCreate(
