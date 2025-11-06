@@ -43,6 +43,13 @@ class RolePermissionSeeder extends Seeder
             'send job offers',
             'edit job offers',
             'delete job offers',
+
+            // Documents
+            'view documents',
+            'create documents',
+            'edit documents',
+            'delete documents',
+
         ];
 
         foreach ($permissions as $permission) {
@@ -56,6 +63,10 @@ class RolePermissionSeeder extends Seeder
         $employeeRole->syncPermissions([
             'view job postings',
             'view candidates',
+            'view documents',
+            'create documents',
+            'edit documents',
+            'delete documents',
         ]);
 
         // System Administrator role - full CRUD on job postings, candidates, and interviews
@@ -75,6 +86,10 @@ class RolePermissionSeeder extends Seeder
             'edit interviews',
             'delete interviews',
             'view job offers',
+            'view documents',
+            'create documents',
+            'edit documents',
+            'delete documents',
         ]);
 
         // Manager role - can do everything including sending job offers
