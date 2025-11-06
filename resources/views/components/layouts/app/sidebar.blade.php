@@ -41,7 +41,15 @@
                                             icon='fas-file-contract' :active="request()->routeIs('job-offers.*')">Job
                                             Offers</x-layouts.sidebar-two-level-link>
                                     @endcan
+                                    
                                 </x-layouts.sidebar-two-level-link-parent>
+                                    @can('view documents')
+                                        <x-layouts.sidebar-link 
+                                        href="{{ route('documents.index') }}"  icon="fas-file-lines"  
+                                        :active="request()->routeIs('documents.*')">Documents
+                                        </x-layouts.sidebar-link>
+
+                                    @endcan
                             @endcanany
                         </ul>
                     </nav>

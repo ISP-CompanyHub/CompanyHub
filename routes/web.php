@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CandidateController;
+use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\InterviewController;
 use App\Http\Controllers\JobOfferController;
 use App\Http\Controllers\JobPostingController;
@@ -71,6 +72,12 @@ Route::middleware(['auth', 'verified', 'role:manager'])->group(function () {
         ->name('job-offers.send');
     Route::get('job-offers/{jobOffer}/download', [JobOfferController::class, 'download'])
         ->name('job-offers.download');
+});
+
+
+// Documents 
+Route::middleware(['auth'])->group(function () {
+    Route::resource('documents', DocumentController::class);
 });
 
 require __DIR__.'/auth.php';
