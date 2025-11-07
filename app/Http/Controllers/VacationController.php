@@ -208,15 +208,6 @@ class VacationController extends Controller
             ->with('success', 'Vacation request updated successfully.');
     }
 
-    public function destroy(Vacation $vacationRequest)
-    {
-        $this->authorize('delete', $vacationRequest);
-
-        $vacationRequest->delete();
-
-        return redirect()->route('vacation.index')
-            ->with('success', 'Vacation request deleted successfully.');
-    }
 
     public function approvals(Request $request)
     {
@@ -259,9 +250,9 @@ class VacationController extends Controller
 
         return redirect()->route('vacation.approvals')->with('success', 'Vacation request approved.');
     }
-    public function leaveBalance(Request $request) : View
+    public function leaveBalanceForm(Request $request)
     {
-        return view('vacation.show', compact('vacationRequest'));
+        return view('vacation.leave_balance');
     }
 
 }

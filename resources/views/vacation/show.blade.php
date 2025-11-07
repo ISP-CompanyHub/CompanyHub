@@ -1,6 +1,5 @@
 <x-layouts.app>
     @php
-        // Support both new and old variable names so this view is forgiving.
         $vac = $vacation ?? $vacationRequest ?? null;
     @endphp
 
@@ -32,7 +31,7 @@
         @else
             <dl class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                    <dt class="text-sm font-medium text-gray-500 dark:text-gray-300">{{ __('ID') }}</dt>
+                    <dt class="text-sm font-medium text-gray-500 dark:text-gray-300">{{ __('Number') }}</dt>
                     <dd class="mt-1 text-sm text-gray-900 dark:text-gray-100">{{ $vac->id }}</dd>
                 </div>
 

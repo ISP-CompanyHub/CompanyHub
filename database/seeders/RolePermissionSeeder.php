@@ -82,8 +82,8 @@ class RolePermissionSeeder extends Seeder
             'delete documents',
 
             // vacations & holidays for employees
-            'view vacation',
-            'create vacation',
+            'view vacation requests',
+            'create vacation requests',
             'view holidays',
             'view leave balances',
         ]);
@@ -118,22 +118,12 @@ class RolePermissionSeeder extends Seeder
             'view vacation requests',
             'create vacation requests',
             'edit vacation requests',
-            'delete vacation requests',
             'approve vacation requests',
-
-
-            // vacations & holidays
-            'view vacation',
-            'create vacation',
-            'edit vacation',
-            'delete vacation',
-            'approve vacation',
-            'view leave balance',
+            'view leave balances',
 
             'view holidays',
             'create holidays',
             'edit holidays',
-            'delete holidays',
         ]);
 
         // Manager role - can do everything (sync all existing permissions)

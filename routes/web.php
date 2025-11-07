@@ -84,13 +84,19 @@ Route::middleware(['auth'])->group(function () {
 
 //Vacations
 Route::middleware(['auth'])->group(function (){
-    Route::resource('vacation', VacationController::class);
     Route::resource('holidays', HolidayController::class);
 
     Route::get('vacation/approvals', [VacationController::class, 'approvals'])->name('vacation.approvals');
     Route::post('vacation/{vacation}/approve', [VacationController::class, 'approve'])->name('vacation.approve');
     Route::resource('holidays', HolidayController::class);
     Route::post('vacation/leave-balance', [VacationController::class, 'leaveBalance'])->name('vacation.leave_balance');
+    Route::get('vacation/leave-balance', [VacationController::class, 'leaveBalanceForm'])
+        ->name('vacation.leave_balance');
+
+    Route::post('vacation/leave-balance', [VacationController::class, 'leaveBalanceGenerate'])
+        ->name('vacation.leave_balance.generate');
+    Route::resource('vacation', VacationController::class);
+
 });
 
 require __DIR__.'/auth.php';
