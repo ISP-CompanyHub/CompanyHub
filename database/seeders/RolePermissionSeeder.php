@@ -50,6 +50,19 @@ class RolePermissionSeeder extends Seeder
             'edit documents',
             'delete documents',
 
+            // Vacations (requests)
+            'view vacation requests',
+            'create vacation requests',
+            'edit vacation requests',
+            'delete vacation requests',
+            'approve vacation requests',
+            'view leave balances',
+
+            // Holidays
+            'view holidays',
+            'create holidays',
+            'edit holidays',
+            'delete holidays',
         ];
 
         foreach ($permissions as $permission) {
@@ -58,7 +71,7 @@ class RolePermissionSeeder extends Seeder
 
         // Create roles and assign permissions
 
-        // Employee role - basic viewing permissions
+        // Employee role - basic viewing and own-request permissions
         $employeeRole = Role::firstOrCreate(['name' => 'employee']);
         $employeeRole->syncPermissions([
             'view job postings',
@@ -67,32 +80,63 @@ class RolePermissionSeeder extends Seeder
             'create documents',
             'edit documents',
             'delete documents',
+
+            // vacations & holidays for employees
+            'view vacation',
+            'create vacation',
+            'view holidays',
+            'view leave balances',
         ]);
 
-        // System Administrator role - full CRUD on job postings, candidates, and interviews
+        // System Administrator role - full CRUD on job postings, candidates, interviews, vacations, holidays
         $adminRole = Role::firstOrCreate(['name' => 'administrator']);
         $adminRole->syncPermissions([
             'view job postings',
             'create job postings',
             'edit job postings',
             'delete job postings',
+
             'view candidates',
             'create candidates',
             'edit candidates',
             'delete candidates',
             'update candidate status',
+
             'view interviews',
             'schedule interviews',
             'edit interviews',
             'delete interviews',
+
             'view job offers',
+
             'view documents',
             'create documents',
             'edit documents',
             'delete documents',
+
+            // vacations & holidays
+            'view vacation requests',
+            'create vacation requests',
+            'edit vacation requests',
+            'delete vacation requests',
+            'approve vacation requests',
+
+
+            // vacations & holidays
+            'view vacation',
+            'create vacation',
+            'edit vacation',
+            'delete vacation',
+            'approve vacation',
+            'view leave balance',
+
+            'view holidays',
+            'create holidays',
+            'edit holidays',
+            'delete holidays',
         ]);
 
-        // Manager role - can do everything including sending job offers
+        // Manager role - can do everything (sync all existing permissions)
         $managerRole = Role::firstOrCreate(['name' => 'manager']);
         $managerRole->syncPermissions(Permission::all());
     }

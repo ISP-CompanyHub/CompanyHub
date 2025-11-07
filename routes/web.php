@@ -4,7 +4,9 @@ use App\Http\Controllers\CandidateController;
 use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\InterviewController;
 use App\Http\Controllers\JobOfferController;
+use App\Http\Controllers\HolidayController;
 use App\Http\Controllers\JobPostingController;
+use App\Http\Controllers\VacationController;
 use App\Http\Controllers\Settings;
 use Illuminate\Support\Facades\Route;
 
@@ -75,9 +77,20 @@ Route::middleware(['auth', 'verified', 'role:manager'])->group(function () {
 });
 
 
-// Documents 
+// Documents
 Route::middleware(['auth'])->group(function () {
     Route::resource('documents', DocumentController::class);
+});
+
+//Vacations
+Route::middleware(['auth'])->group(function (){
+    Route::resource('vacation', VacationController::class);
+    Route::resource('holidays', HolidayController::class);
+
+    Route::get('vacation/approvals', [VacationController::class, 'approvals'])->name('vacation.approvals');
+    Route::post('vacation/{vacation}/approve', [VacationController::class, 'approve'])->name('vacation.approve');
+    Route::resource('holidays', HolidayController::class);
+    Route::post('vacation/leave-balance', [VacationController::class, 'leaveBalance'])->name('vacation.leave_balance');
 });
 
 require __DIR__.'/auth.php';
