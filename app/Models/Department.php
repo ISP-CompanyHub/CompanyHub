@@ -36,4 +36,14 @@ class Department extends Authenticatable
             'status' => UserStatus::class
         ];
     }
+
+    public function lead()
+    {
+        return $this->belongsTo(User::class, 'department_lead_id');
+    }
+
+    public function employees()
+    {
+        return $this->hasMany(User::class, 'department_id');
+    }
 }

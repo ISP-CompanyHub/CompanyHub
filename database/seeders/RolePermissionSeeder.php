@@ -51,11 +51,12 @@ class RolePermissionSeeder extends Seeder
             'delete documents',
 
             // Employee Profiles and Departments
-            'view profile',
+            'view employee profile',
+            'view departments', // Not part of use case diagram, but added to complement 'edit departments'
             'edit departments',
             'view employees',
-            'edit profile',
-            'create profile',
+            'edit employee profile',
+            'create employee profile',
             'generate company structure'
         ];
 
@@ -74,7 +75,7 @@ class RolePermissionSeeder extends Seeder
             'create documents',
             'edit documents',
             'delete documents',
-            'view profile',
+            'view employee profile',
             'generate company structure'
         ]);
 
@@ -99,10 +100,12 @@ class RolePermissionSeeder extends Seeder
             'create documents',
             'edit documents',
             'delete documents',
+            'view employee profile',
+            'view departments',
             'edit departments',
             'view employees',
-            'edit profile',
-            'create profile',
+            'edit employee profile',
+            'create employee profile',
         ]);
 
         // Manager role - can do everything including sending job offers

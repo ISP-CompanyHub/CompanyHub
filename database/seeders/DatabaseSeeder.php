@@ -75,9 +75,54 @@ class DatabaseSeeder extends Seeder
         User::firstOrCreate(
             ['email' => 'test@example.com'],
             [
-                'name' => 'Test User',
+                'name' => 'Test User1',
                 'surname' => 'Example',
-                'personal_id' => 'T000000001',
+                'personal_id' => 'T000000002',
+                'date_of_birth' => '1990-01-01',
+                'phone_number' => '+1000000000',
+                'address' => '100 Test Blvd, City, Country',
+                'job_title' => 'Tester',
+                'password' => bcrypt('password'),
+                'email_verified_at' => now(),
+                'department_id' => Department::query()->where('name', 'IT')->first()->id,
+            ]
+        );
+        User::firstOrCreate(
+            ['email' => 'test2@example.com'],
+            [
+                'name' => 'Test User2',
+                'surname' => 'Example',
+                'personal_id' => 'T000000003',
+                'date_of_birth' => '1990-01-01',
+                'phone_number' => '+1000000000',
+                'address' => '100 Test Blvd, City, Country',
+                'job_title' => 'Tester',
+                'password' => bcrypt('password'),
+                'email_verified_at' => now(),
+                'department_id' => Department::query()->where('name', 'IT')->first()->id,
+            ]
+        );
+        User::firstOrCreate(
+            ['email' => 'test3@example.com'],
+            [
+                'name' => 'Test User3',
+                'surname' => 'Example',
+                'personal_id' => 'T000000004',
+                'date_of_birth' => '1990-01-01',
+                'phone_number' => '+1000000000',
+                'address' => '100 Test Blvd, City, Country',
+                'job_title' => 'Tester',
+                'password' => bcrypt('password'),
+                'email_verified_at' => now(),
+                'department_id' => Department::query()->where('name', 'IT')->first()->id,
+            ]
+        );
+        User::firstOrCreate(
+            ['email' => 'test4@example.com'],
+            [
+                'name' => 'Test User4',
+                'surname' => 'Example',
+                'personal_id' => 'T000000005',
                 'date_of_birth' => '1990-01-01',
                 'phone_number' => '+1000000000',
                 'address' => '100 Test Blvd, City, Country',

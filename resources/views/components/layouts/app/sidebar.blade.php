@@ -41,15 +41,56 @@
                                             icon='fas-file-contract' :active="request()->routeIs('job-offers.*')">Job
                                             Offers</x-layouts.sidebar-two-level-link>
                                     @endcan
-                                    
-                                </x-layouts.sidebar-two-level-link-parent>
-                                    @can('view documents')
-                                        <x-layouts.sidebar-link 
-                                        href="{{ route('documents.index') }}"  icon="fas-file-lines"  
-                                        :active="request()->routeIs('documents.*')">Documents
-                                        </x-layouts.sidebar-link>
 
+                                </x-layouts.sidebar-two-level-link-parent>
+                            @endcanany
+                            @can('view documents')
+                                <x-layouts.sidebar-link
+                                    href="{{ route('documents.index') }}"  icon="fas-file-lines"
+                                    :active="request()->routeIs('documents.*')">Documents
+                                </x-layouts.sidebar-link>
+                            @endcan
+                            @canany(['view employee profile', 'view departments', 'view employees', 'generate company structure'])
+                                <x-layouts.sidebar-two-level-link-parent
+                                    title="Employees & Departments"
+                                    icon="fas-users-gear" :active="request()->routeIs('profiles.*', 'departments.*', 'company-structure.*')"
+                                >
+                                    @can('view employee profile')
+                                        <x-layouts.sidebar-two-level-link
+                                            href="{{ route('profiles.show', request()->user()) }}"
+                                            icon="fas-id-card" :active="request()->routeIs('profiles.show')"
+                                        >
+                                            View Profile
+                                        </x-layouts.sidebar-two-level-link>
                                     @endcan
+
+                                    @can('view employees')
+                                        <x-layouts.sidebar-two-level-link
+                                            href="{{ route('profiles.index') }}"
+                                            icon="fas-users" :active="request()->routeIs('profiles.index', 'profiles.edit')"
+                                        >
+                                            View Employees
+                                        </x-layouts.sidebar-two-level-link>
+                                    @endcan
+
+                                    @can('view departments')
+                                        <x-layouts.sidebar-two-level-link
+                                            href="{{ route('departments.index') }}"
+                                            icon="fas-building" :active="request()->routeIs('departments.*')"
+                                        >
+                                            View Departments
+                                        </x-layouts.sidebar-two-level-link>
+                                    @endcan
+
+                                    @can('generate company structure')
+                                        <x-layouts.sidebar-two-level-link
+                                            href="{{ route('company-structure.index') }}"
+                                            icon="fas-diagram-project" :active="request()->routeIs('company-structure.*')"
+                                        >
+                                            Company Structure
+                                        </x-layouts.sidebar-two-level-link>
+                                    @endcan
+                                </x-layouts.sidebar-two-level-link-parent>
                             @endcanany
                         </ul>
                     </nav>
