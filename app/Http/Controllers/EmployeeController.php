@@ -38,9 +38,10 @@ class EmployeeController extends Controller
         return view('profiles.show', compact('employee'));
     }
 
-    public function create(Request $request)
+    public function create()
     {
-        return view('profiles.create');
+        $departments = Department::all();
+        return view('profiles.create', compact('departments'));
     }
 
     public function store(Request $request)

@@ -86,6 +86,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('profiles', [EmployeeController::class, 'index'])
         ->name('profiles.index');
 
+    Route::get('profiles/create', [EmployeeController::class, 'create'])->name('profiles.create');
+
+    Route::post('profiles/create', [EmployeeController::class, 'store'])
+        ->name('profiles.store');
+
     Route::get('profiles/{employee}', [EmployeeController::class, 'show'])
         ->name('profiles.show');
 
@@ -94,9 +99,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::put('profiles/{employee}', [EmployeeController::class, 'update'])
         ->name('profiles.update');
-
-    Route::post('profiles/create', [EmployeeController::class, 'store'])
-        ->name('profiles.create');
 });
 
 // Departments Management (Administrator | Manager)
