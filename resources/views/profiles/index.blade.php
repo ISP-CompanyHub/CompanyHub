@@ -123,7 +123,7 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="5" class="px-6 py-8 text-center text-gray-500 dark:text-gray-400">
+                        <td colspan="6" class="px-6 py-8 text-center text-gray-500 dark:text-gray-400">
                             {{ __('No employees found.') }}
                         </td>
                     </tr>

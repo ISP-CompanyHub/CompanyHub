@@ -102,7 +102,7 @@
                             <span
                                 class="px-2 py-1 text-xs font-semibold rounded-full
                                 {{ $employee->status->value === 'active' ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300' : '' }}
-                                {{ $employee->status->value === 'rejected' ? 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300' : '' }}">
+                                {{ $employee->status->value === 'inactive' ? 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300' : '' }}">
                                 {{ ucfirst(str_replace('_', ' ', $employee->status->value)) }}
                             </span>
                         </dd>

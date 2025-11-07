@@ -47,9 +47,18 @@ class EmployeeController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'position' => 'required|string|max:255',
+            'surname' => 'required|string|max:255',
+            'job_title' => 'required|string|max:255',
             'department_id' => 'nullable|exists:departments,id',
+            'personal_id' => 'required|string|max:50',
+            'date_of_birth' => 'required|date',
+            'phone_number' => 'required|string|max:20',
+            'address' => 'required|string|max:255',
+            'email' => 'required|email|max:255|unique:users,email',
+            'password' => 'required|string|min:8|confirmed',
         ]);
+
+        $validated['password'] = bcrypt($validated['password']);
 
         User::create($validated);
         return redirect()->route('profiles.index')->with('success', 'Profile created successfully.');
@@ -68,14 +77,14 @@ class EmployeeController extends Controller
             'surname' => 'required|string|max:255',
             'job_title' => 'nullable|string|max:255',
             'department_id' => 'required|exists:departments,id',
-            'email' => 'required|email|max:255',
+            'email' => 'required|email|max:255|unique:users,email,' . $employee->id,
             'phone_number' => 'nullable|string|max:20',
             'address' => 'nullable|string|max:255',
         ]);
 
         $employee->update($validated);
 
-        return redirect()->route('profiles.show', compact('employee'))
+        return redirect()->route('profiles.show','employee')
             ->with('success', __('Employee profile updated successfully.'));
     }
 }

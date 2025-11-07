@@ -4,10 +4,11 @@ namespace App\Services;
 
 use App\Models\Department;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Http\Response;
 
 class CompanyStructurePdfService
 {
-    public function generate()
+    public function generate(): Response
     {
         $departments = Department::with(['lead', 'employees'])->get();
 

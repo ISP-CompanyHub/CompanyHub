@@ -31,7 +31,7 @@ class DatabaseSeeder extends Seeder
                 'job_title' => 'System Administrator',
                 'password' => bcrypt('password'),
                 'email_verified_at' => now(),
-                'department_id' => Department::query()->where('name', 'Administration')->first()->id,
+                'department_id' => Department::query()->where('name', 'Administration')->firstOrFail()->id,
             ]
         );
         $admin->syncRoles(['administrator']);
@@ -48,10 +48,10 @@ class DatabaseSeeder extends Seeder
                 'job_title' => 'Manager',
                 'password' => bcrypt('password'),
                 'email_verified_at' => now(),
-                'department_id' => Department::query()->where('name', 'Sales')->first()->id,
+                'department_id' => Department::query()->where('name', 'Sales')->firstOrFail()->id,
             ]
         );
-        Department::query()->where('name', 'Sales')->first()->update(['department_lead_id' => $manager->id]);
+        Department::query()->where('name', 'Sales')->firstOrFail()->update(['department_lead_id' => $manager->id]);
         $manager->syncRoles(['manager']);
 
         $employee = User::firstOrCreate(
@@ -66,7 +66,7 @@ class DatabaseSeeder extends Seeder
                 'job_title' => 'Staff Member',
                 'password' => bcrypt('password'),
                 'email_verified_at' => now(),
-                'department_id' => Department::query()->where('name', 'Customer Support')->first()->id,
+                'department_id' => Department::query()->where('name', 'Customer Support')->firstOrFail()->id,
             ]
         );
         $employee->syncRoles(['employee']);
@@ -84,7 +84,7 @@ class DatabaseSeeder extends Seeder
                 'job_title' => 'Tester',
                 'password' => bcrypt('password'),
                 'email_verified_at' => now(),
-                'department_id' => Department::query()->where('name', 'IT')->first()->id,
+                'department_id' => Department::query()->where('name', 'IT')->firstOrFail()->id,
             ]
         );
         User::firstOrCreate(
@@ -99,7 +99,7 @@ class DatabaseSeeder extends Seeder
                 'job_title' => 'Tester',
                 'password' => bcrypt('password'),
                 'email_verified_at' => now(),
-                'department_id' => Department::query()->where('name', 'IT')->first()->id,
+                'department_id' => Department::query()->where('name', 'IT')->firstOrFail()->id,
             ]
         );
         User::firstOrCreate(
@@ -114,7 +114,7 @@ class DatabaseSeeder extends Seeder
                 'job_title' => 'Tester',
                 'password' => bcrypt('password'),
                 'email_verified_at' => now(),
-                'department_id' => Department::query()->where('name', 'IT')->first()->id,
+                'department_id' => Department::query()->where('name', 'IT')->firstOrFail()->id,
             ]
         );
         User::firstOrCreate(
@@ -129,7 +129,7 @@ class DatabaseSeeder extends Seeder
                 'job_title' => 'Tester',
                 'password' => bcrypt('password'),
                 'email_verified_at' => now(),
-                'department_id' => Department::query()->where('name', 'IT')->first()->id,
+                'department_id' => Department::query()->where('name', 'IT')->firstOrFail()->id,
             ]
         );
     }

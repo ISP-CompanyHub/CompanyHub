@@ -4,15 +4,14 @@ namespace App\Models;
 
 use App\Enums\UserStatus;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
 
-class Department extends Authenticatable
+class Department extends Model
 {
     /** @use HasFactory<\Database\Factories\DepartmentFactory> */
-    use HasFactory, Notifiable;
+    use HasFactory;
 
     /**
      * The attributes that are mass assignable.
@@ -21,7 +20,8 @@ class Department extends Authenticatable
      */
     protected $fillable = [
         'name',
-        'description'
+        'description',
+        'department_lead_id'
     ];
 
     /**
@@ -32,10 +32,9 @@ class Department extends Authenticatable
     protected function casts(): array
     {
         return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-            'date_of_birth' => 'date',
-            'status' => UserStatus::class
+            'name' => 'string',
+            'description' => 'string',
+
         ];
     }
 

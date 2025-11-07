@@ -20,7 +20,7 @@ class DepartmentFactory extends Factory
         return [
             'name' => $this->faker->company . ' Department',
             'description' => $this->faker->paragraph,
-            'department_lead_id' => User::factory(),
+            'department_lead_id' => null,
         ];
     }
 }
