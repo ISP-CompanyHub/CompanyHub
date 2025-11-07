@@ -44,25 +44,25 @@
                 <div>
                     <label for="name" class="block text-sm font-medium text-gray-500 dark:text-gray-400">{{ __('First Name') }}</label>
                     <input type="text" id="name" name="name" value="{{ old('name', $employee->name) }}"
-                           class="mt-1 block w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 focus:ring-blue-500 focus:border-blue-500 text-sm">
+                           class="p-2 mt-1 block w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 focus:ring-blue-500 focus:border-blue-500 text-sm">
                 </div>
 
                 <div>
                     <label for="surname" class="block text-sm font-medium text-gray-500 dark:text-gray-400">{{ __('Surname') }}</label>
                     <input type="text" id="surname" name="surname" value="{{ old('surname', $employee->surname) }}"
-                           class="mt-1 block w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 focus:ring-blue-500 focus:border-blue-500 text-sm">
+                           class="p-2 mt-1 block w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 focus:ring-blue-500 focus:border-blue-500 text-sm">
                 </div>
 
                 <div>
                     <label for="job_title" class="block text-sm font-medium text-gray-500 dark:text-gray-400">{{ __('Job Title') }}</label>
                     <input type="text" id="job_title" name="job_title" value="{{ old('job_title', $employee->job_title) }}"
-                           class="mt-1 block w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 focus:ring-blue-500 focus:border-blue-500 text-sm">
+                           class="p-2 mt-1 block w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 focus:ring-blue-500 focus:border-blue-500 text-sm">
                 </div>
 
                 <div>
                     <label for="department_id" class="block text-sm font-medium text-gray-500 dark:text-gray-400">{{ __('Department') }}</label>
                     <select id="department_id" name="department_id"
-                            class="mt-1 block w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 focus:ring-blue-500 focus:border-blue-500 text-sm">
+                            class="p-2 mt-1 block w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 focus:ring-blue-500 focus:border-blue-500 text-sm">
                         @foreach ($departments as $department)
                             <option value="{{ $department->id }}"
                                 {{ old('department_id', $employee->department->id ?? '') == $department->id ? 'selected' : '' }}>
@@ -75,19 +75,19 @@
                 <div>
                     <label for="email" class="block text-sm font-medium text-gray-500 dark:text-gray-400">{{ __('Email') }}</label>
                     <input type="email" id="email" name="email" value="{{ old('email', $employee->email) }}"
-                           class="mt-1 block w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 focus:ring-blue-500 focus:border-blue-500 text-sm">
+                           class="p-2 mt-1 block w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 focus:ring-blue-500 focus:border-blue-500 text-sm">
                 </div>
 
                 <div>
                     <label for="phone_number" class="block text-sm font-medium text-gray-500 dark:text-gray-400">{{ __('Phone Number') }}</label>
                     <input type="text" id="phone_number" name="phone_number" value="{{ old('phone_number', $employee->phone_number) }}"
-                           class="mt-1 block w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 focus:ring-blue-500 focus:border-blue-500 text-sm">
+                           class="p-2 mt-1 block w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 focus:ring-blue-500 focus:border-blue-500 text-sm">
                 </div>
 
                 <div class="md:col-span-2">
                     <label for="address" class="block text-sm font-medium text-gray-500 dark:text-gray-400">{{ __('Address') }}</label>
                     <input type="text" id="address" name="address" value="{{ old('address', $employee->address) }}"
-                           class="mt-1 block w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 focus:ring-blue-500 focus:border-blue-500 text-sm">
+                           class="p-2 mt-1 block w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 focus:ring-blue-500 focus:border-blue-500 text-sm">
                 </div>
             </div>
         </div>

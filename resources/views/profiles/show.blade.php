@@ -32,7 +32,6 @@
     @endif
 
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {{-- Personal Information --}}
         <div class="lg:col-span-2 bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
             <h2 class="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-4">
                 {{ __('Personal Information') }}
@@ -62,9 +61,7 @@
             </dl>
         </div>
 
-        {{-- Contact + Other Information --}}
         <div class="space-y-6">
-            {{-- Contact Information --}}
             <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
                 <h2 class="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-4">
                     {{ __('Contact Information') }}
@@ -94,7 +91,6 @@
                 </dl>
             </div>
 
-            {{-- Other Information --}}
             <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
                 <h2 class="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-4">
                     {{ __('Other Information') }}

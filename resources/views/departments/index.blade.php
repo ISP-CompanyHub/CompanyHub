@@ -17,14 +17,17 @@
         </div>
     </div>
 
-    {{-- Search bar --}}
     <form method="GET" action="{{ route('departments.index') }}" class="mb-4">
-        <input type="text" name="search" value="{{ request('search') }}"
-               placeholder="{{ __('Search departments...') }}"
-               class="w-full md:w-1/3 rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 focus:ring-blue-500 focus:border-blue-500 text-sm px-3 py-2">
+        <div class="flex items-end space-x-2">
+            <input type="text" name="search" value="{{ request('search') }}"
+                   placeholder="{{ __('Search departments...') }}"
+                   class="w-full md:w-1/3 rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 focus:ring-blue-500 focus:border-blue-500 text-sm px-3 py-2">
+            <button type="submit" class="bg-gray-600 hover:bg-gray-700 text-white text-sm px-4 py-2 rounded-lg">
+                {{ __('Search') }}
+            </button>
+        </div>
     </form>
 
-    {{-- Table --}}
     <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
         <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
             <thead class="bg-gray-50 dark:bg-gray-700">

@@ -4,6 +4,8 @@ namespace App\Models;
 
 use App\Enums\UserStatus;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -37,12 +39,12 @@ class Department extends Authenticatable
         ];
     }
 
-    public function lead()
+    public function lead(): BelongsTo
     {
         return $this->belongsTo(User::class, 'department_lead_id');
     }
 
-    public function employees()
+    public function employees(): HasMany
     {
         return $this->hasMany(User::class, 'department_id');
     }

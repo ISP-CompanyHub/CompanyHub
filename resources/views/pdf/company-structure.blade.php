@@ -9,7 +9,6 @@
             font-size: 12px;
         }
 
-        /* --- Org Chart Structure --- */
         .org-chart,
         .org-chart ul {
             list-style-type: none;
@@ -21,7 +20,7 @@
         }
 
         .org-chart ul {
-            padding-left: 25px; /* Indentation for children */
+            padding-left: 25px;
             margin-left: 10px;
         }
 
@@ -31,7 +30,6 @@
             padding-bottom: 4px;
         }
 
-        /* --- Node Styling --- */
         .node {
             display: inline-block;
             border: 1px solid #aaa;
@@ -64,17 +62,13 @@
             display: block;
         }
 
-        /* --- Connecting Lines --- */
-        /* This part may not render in a PDF */
         .org-chart li::before,
         .org-chart li::after {
             content: '';
             position: absolute;
-            left: -15px; /* Aligns into the parent's padding */
+            left: -15px;
         }
 
-        /* Horizontal line from parent */
-        /* We hardcode '18px' to vertically align the line */
         .org-chart li::before {
             border-top: 1px solid #999;
             top: 18px;
@@ -82,7 +76,6 @@
             height: 0;
         }
 
-        /* Vertical line connecting siblings */
         .org-chart li::after {
             border-left: 1px solid #999;
             top: 0;
@@ -90,18 +83,17 @@
             height: 100%;
         }
 
-        /* Adjustments for first/last child */
         .org-chart li:first-child::after {
-            top: 18px; /* Start line from middle */
+            top: 18px;
             height: 100%;
         }
 
         .org-chart li:last-child::after {
-            height: 18px; /* Stop line at middle */
+            height: 18px;
         }
 
         .org-chart li:only-child::after {
-            display: none; /* No vertical line for one child */
+            display: none;
         }
     </style>
 </head>
@@ -111,7 +103,6 @@
 <ul class="org-chart">
     @foreach($departments as $department)
         <li>
-            {{-- Department Node --}}
             <div class="node node-department">
                 {{ $department->name }}
                 @if($department->lead)
@@ -119,12 +110,10 @@
                 @endif
             </div>
 
-            {{-- Employees List (Nested) --}}
             @if($department->employees->isNotEmpty())
                 <ul>
                     @foreach($department->employees as $employee)
                         <li>
-                            {{-- Employee Node --}}
                             <div class="node node-employee">
                                 {{ $employee->name }} {{ $employee->surname }}
                                 <small class="job-title">{{ $employee->job_title ?? '—' }}</small>
