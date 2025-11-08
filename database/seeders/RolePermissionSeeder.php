@@ -50,6 +50,19 @@ class RolePermissionSeeder extends Seeder
             'edit documents',
             'delete documents',
 
+            // Vacations (requests)
+            'view vacation requests',
+            'create vacation requests',
+            'edit vacation requests',
+            'delete vacation requests',
+            'approve vacation requests',
+            'view leave balances',
+
+            // Holidays
+            'view holidays',
+            'create holidays',
+            'edit holidays',
+            'delete holidays',
             // Employee Profiles and Departments
             'view employee profile',
             'view departments', // Not part of use case diagram, but added to complement 'edit departments'
@@ -66,7 +79,7 @@ class RolePermissionSeeder extends Seeder
 
         // Create roles and assign permissions
 
-        // Employee role - basic viewing permissions
+        // Employee role - basic viewing and own-request permissions
         $employeeRole = Role::firstOrCreate(['name' => 'employee']);
         $employeeRole->syncPermissions([
             'view job postings',
@@ -75,31 +88,48 @@ class RolePermissionSeeder extends Seeder
             'create documents',
             'edit documents',
             'delete documents',
+            'view vacation requests',
+            'create vacation requests',
+            'view holidays',
+            'view leave balances',
             'view employee profile',
             'generate company structure'
         ]);
 
-        // System Administrator role - full CRUD on job postings, candidates, and interviews
+        // System Administrator role - full CRUD on job postings, candidates, interviews, vacations, holidays, profiles
         $adminRole = Role::firstOrCreate(['name' => 'administrator']);
         $adminRole->syncPermissions([
             'view job postings',
             'create job postings',
             'edit job postings',
             'delete job postings',
+
             'view candidates',
             'create candidates',
             'edit candidates',
             'delete candidates',
             'update candidate status',
+
             'view interviews',
             'schedule interviews',
             'edit interviews',
             'delete interviews',
+
             'view job offers',
+
             'view documents',
             'create documents',
             'edit documents',
             'delete documents',
+
+            'view vacation requests',
+            'create vacation requests',
+            'edit vacation requests',
+            'approve vacation requests',
+            'view leave balances',
+            'view holidays',
+            'create holidays',
+            'edit holidays',
             'view employee profile',
             'view departments',
             'edit departments',
@@ -108,7 +138,7 @@ class RolePermissionSeeder extends Seeder
             'create employee profile',
         ]);
 
-        // Manager role - can do everything including sending job offers
+        // Manager role - can do everything (sync all existing permissions)
         $managerRole = Role::firstOrCreate(['name' => 'manager']);
         $managerRole->syncPermissions(Permission::all());
     }
