@@ -1,7 +1,10 @@
 <?php
 
 use App\Http\Controllers\CandidateController;
+use App\Http\Controllers\CompanyStructureController;
+use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\DocumentController;
+use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\InterviewController;
 use App\Http\Controllers\JobOfferController;
 use App\Http\Controllers\HolidayController;
@@ -98,5 +101,37 @@ Route::middleware(['auth'])->group(function (){
     Route::resource('vacation', VacationController::class);
 
 });
+
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('profiles', [EmployeeController::class, 'index'])
+        ->name('profiles.index');
+
+    Route::get('profiles/create', [EmployeeController::class, 'create'])->name('profiles.create');
+
+    Route::post('profiles/create', [EmployeeController::class, 'store'])
+        ->name('profiles.store');
+
+    Route::get('profiles/{employee}', [EmployeeController::class, 'show'])
+        ->name('profiles.show');
+
+    Route::get('profiles/{employee}/edit', [EmployeeController::class, 'edit'])
+        ->name('profiles.edit');
+
+    Route::put('profiles/{employee}', [EmployeeController::class, 'update'])
+        ->name('profiles.update');
+});
+
+// Departments Management (Administrator | Manager)
+Route::middleware(['auth', 'verified', 'role:administrator|manager'])->prefix('departments')->name('departments.')->group(function () {
+    Route::get('/', [DepartmentController::class, 'index'])->name('index');
+    Route::get('{department}/edit', [DepartmentController::class, 'edit'])->name('edit');
+    Route::put('{department}', [DepartmentController::class, 'update'])->name('update');
+});
+
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('company-structure', [CompanyStructureController::class, 'index'])->name('company-structure.index');
+    Route::post('company-structure/pdf', [CompanyStructureController::class, 'generatePdf'])->name('company-structure.pdf');
+});
+
 
 require __DIR__.'/auth.php';

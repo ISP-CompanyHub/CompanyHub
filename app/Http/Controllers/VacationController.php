@@ -154,8 +154,6 @@ class VacationController extends Controller
 
     public function store(Request $request)
     {
-        $this->authorize('create', Vacation::class);
-
         $data = $request->validate([
             'submission_date' => 'nullable|date',
             'vacation_start'  => 'required|date|before_or_equal:vacation_end',
@@ -187,8 +185,6 @@ class VacationController extends Controller
 
     public function update(Request $request, Vacation $vacationRequest)
     {
-        $this->authorize('update', $vacationRequest);
-
         $data = $request->validate([
             'submission_date' => 'nullable|date',
             'vacation_start'  => 'required|date|before_or_equal:vacation_end',

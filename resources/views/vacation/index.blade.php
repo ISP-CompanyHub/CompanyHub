@@ -9,7 +9,7 @@
             @can('create vacation requests')
                 <a href="{{ route('vacation.create') }}"
                    class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg inline-flex items-center">
-                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg class="w-5 h-5 mr-2" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
                     </svg>
                     {{ __('Create Request') }}
@@ -20,7 +20,7 @@
             @can('view leave balances')
                 <a href="{{ route('vacation.leave_balance') }}"
                    class="ml-2 bg-gray-600 hover:bg-gray-700 text-white px-3 py-2 rounded-lg inline-flex items-center text-sm">
-                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg class="w-4 h-4 mr-2" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                               d="M12 8c1.657 0 3 .895 3 2v4M12 8c-1.657 0-3 .895-3 2v4M5 12h14" />
                     </svg>

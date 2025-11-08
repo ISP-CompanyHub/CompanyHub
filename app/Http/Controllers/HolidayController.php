@@ -73,8 +73,6 @@ class HolidayController extends Controller
      */
     public function store(Request $request)
     {
-        $this->authorize('create', Holiday::class);
-
         $data = $request->validate([
             'holiday_date' => 'required|date',
             'title'        => 'required|string|max:255',

@@ -63,6 +63,14 @@ class RolePermissionSeeder extends Seeder
             'create holidays',
             'edit holidays',
             'delete holidays',
+            // Employee Profiles and Departments
+            'view employee profile',
+            'view departments', // Not part of use case diagram, but added to complement 'edit departments'
+            'edit departments',
+            'view employees',
+            'edit employee profile',
+            'create employee profile',
+            'generate company structure'
         ];
 
         foreach ($permissions as $permission) {
@@ -80,15 +88,15 @@ class RolePermissionSeeder extends Seeder
             'create documents',
             'edit documents',
             'delete documents',
-
-            // vacations & holidays for employees
             'view vacation requests',
             'create vacation requests',
             'view holidays',
             'view leave balances',
+            'view employee profile',
+            'generate company structure'
         ]);
 
-        // System Administrator role - full CRUD on job postings, candidates, interviews, vacations, holidays
+        // System Administrator role - full CRUD on job postings, candidates, interviews, vacations, holidays, profiles
         $adminRole = Role::firstOrCreate(['name' => 'administrator']);
         $adminRole->syncPermissions([
             'view job postings',
@@ -114,16 +122,20 @@ class RolePermissionSeeder extends Seeder
             'edit documents',
             'delete documents',
 
-            // vacations & holidays
             'view vacation requests',
             'create vacation requests',
             'edit vacation requests',
             'approve vacation requests',
             'view leave balances',
-
             'view holidays',
             'create holidays',
             'edit holidays',
+            'view employee profile',
+            'view departments',
+            'edit departments',
+            'view employees',
+            'edit employee profile',
+            'create employee profile',
         ]);
 
         // Manager role - can do everything (sync all existing permissions)

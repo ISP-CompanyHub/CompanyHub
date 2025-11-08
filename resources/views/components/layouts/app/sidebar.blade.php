@@ -1,5 +1,4 @@
-<aside :class="{ 'w-full md:w-64': sidebarOpen, 'w-0 md:w-16 hidden md:block': !sidebarOpen }"
-       class="bg-sidebar text-sidebar-foreground border-r border-gray-200 dark:border-gray-700 sidebar-transition overflow-hidden">
+<aside class="bg-sidebar text-sidebar-foreground border-r border-gray-200 dark:border-gray-700 sidebar-transition overflow-hidden">
     <!-- Sidebar Content -->
     <div class="h-full flex flex-col">
         <!-- Sidebar Menu -->
@@ -61,7 +60,6 @@
                     </x-layouts.sidebar-link>
                 @endcan
 
-                {{-- Vacation parent with dropdown: Requests + Approvals + Holidays + Leave Balances --}}
                 @canany(['view vacation requests', 'approve vacation requests', 'view holidays', 'view leave balances'])
                     <x-layouts.sidebar-two-level-link-parent
                         title="Vacation"
@@ -103,7 +101,48 @@
                     </x-layouts.sidebar-two-level-link-parent>
                 @endcanany
 
-                {{-- Add other top-level items below as needed --}}
+                @canany(['view employee profile', 'view departments', 'view employees', 'generate company structure'])
+                    <x-layouts.sidebar-two-level-link-parent
+                        title="Employees & Departments"
+                        icon="fas-users-gear" :active="request()->routeIs('profiles.*', 'departments.*', 'company-structure.*')"
+                    >
+                        @can('view employee profile')
+                            <x-layouts.sidebar-two-level-link
+                                href="{{ route('profiles.show', request()->user()) }}"
+                                icon="fas-id-card" :active="request()->routeIs('profiles.show')"
+                            >
+                                View Profile
+                            </x-layouts.sidebar-two-level-link>
+                        @endcan
+
+                        @can('view employees')
+                            <x-layouts.sidebar-two-level-link
+                                href="{{ route('profiles.index') }}"
+                                icon="fas-users" :active="request()->routeIs('profiles.index', 'profiles.edit')"
+                            >
+                                View Employees
+                            </x-layouts.sidebar-two-level-link>
+                        @endcan
+
+                        @can('view departments')
+                            <x-layouts.sidebar-two-level-link
+                                href="{{ route('departments.index') }}"
+                                icon="fas-building" :active="request()->routeIs('departments.*')"
+                            >
+                                View Departments
+                            </x-layouts.sidebar-two-level-link>
+                        @endcan
+
+                        @can('generate company structure')
+                            <x-layouts.sidebar-two-level-link
+                                href="{{ route('company-structure.index') }}"
+                                icon="fas-diagram-project" :active="request()->routeIs('company-structure.*')"
+                            >
+                                Company Structure
+                            </x-layouts.sidebar-two-level-link>
+                        @endcan
+                    </x-layouts.sidebar-two-level-link-parent>
+                @endcanany
             </ul>
         </nav>
     </div>
