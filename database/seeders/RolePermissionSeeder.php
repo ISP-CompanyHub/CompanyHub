@@ -141,13 +141,14 @@ class RolePermissionSeeder extends Seeder
             'view employees',
             'edit employee profile',
             'create employee profile',
-			
 			                        
             'view salaries',
             'create salaries',
             'edit salaries',
             'delete salaries',
             'generate monthly salary',
+          
+            'generate company structure'
         ]);
 
         // Manager role - can do everything (sync all existing permissions)
