@@ -2,7 +2,6 @@
 
 namespace Database\Factories;
 
-use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -18,7 +17,7 @@ class DepartmentFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => $this->faker->company . ' Department',
+            'name' => $this->faker->company.' Department',
             'description' => $this->faker->paragraph,
             'department_lead_id' => null,
         ];

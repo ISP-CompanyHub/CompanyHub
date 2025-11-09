@@ -4,9 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Document extends Model
 {
@@ -20,7 +19,7 @@ class Document extends Model
     protected $fillable = [
         'name',
         'type',
-        'owner_id'
+        'owner_id',
     ];
 
     /**
@@ -30,6 +29,7 @@ class Document extends Model
     {
         return $this->hasMany(DocumentVersion::class);
     }
+
     public function owner(): BelongsTo
     {
         return $this->belongsTo(User::class);

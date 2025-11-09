@@ -2,14 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Vacation;
 use App\Models\Holiday;
-use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
+use App\Models\Vacation;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Validation\Rule;
 use Illuminate\View\View;
-use Illuminate\Support\Facades\Gate;
 
 class VacationController extends Controller
 {
@@ -17,7 +16,6 @@ class VacationController extends Controller
      * Mock data
      * /
      */
-
     public function index()
     {
         $vacationRequests = collect([
@@ -87,7 +85,6 @@ class VacationController extends Controller
             ],
         ]);
 
-
         // For the quick preview you can just return the collection/array.
         return view('vacation.index', compact('vacationRequests'));
     }
@@ -144,10 +141,8 @@ class VacationController extends Controller
 
         return view('vacation.index', ['vacationRequests' => $paginator]);
     }
-*/
-
-
-    public function create() : View
+     */
+    public function create(): View
     {
         return view('vacation.create');
     }
@@ -156,11 +151,11 @@ class VacationController extends Controller
     {
         $data = $request->validate([
             'submission_date' => 'nullable|date',
-            'vacation_start'  => 'required|date|before_or_equal:vacation_end',
-            'vacation_end'    => 'required|date|after_or_equal:vacation_start',
-            'type'            => 'required|string|max:255',
-            'status'          => ['required', 'string', Rule::in(['pending', 'approved', 'rejected'])],
-            'comments'        => 'required|string',
+            'vacation_start' => 'required|date|before_or_equal:vacation_end',
+            'vacation_end' => 'required|date|after_or_equal:vacation_start',
+            'type' => 'required|string|max:255',
+            'status' => ['required', 'string', Rule::in(['pending', 'approved', 'rejected'])],
+            'comments' => 'required|string',
         ]);
 
         $data['submission_date'] = $data['submission_date'] ?? now();
@@ -187,11 +182,11 @@ class VacationController extends Controller
     {
         $data = $request->validate([
             'submission_date' => 'nullable|date',
-            'vacation_start'  => 'required|date|before_or_equal:vacation_end',
-            'vacation_end'    => 'required|date|after_or_equal:vacation_start',
-            'type'            => 'required|string|max:255',
-            'status'          => ['required', 'string', Rule::in(['pending', 'approved', 'rejected'])],
-            'comments'        => 'required|string',
+            'vacation_start' => 'required|date|before_or_equal:vacation_end',
+            'vacation_end' => 'required|date|after_or_equal:vacation_start',
+            'type' => 'required|string|max:255',
+            'status' => ['required', 'string', Rule::in(['pending', 'approved', 'rejected'])],
+            'comments' => 'required|string',
         ]);
 
         if (empty($data['submission_date'])) {
@@ -203,7 +198,6 @@ class VacationController extends Controller
         return redirect()->route('vacation.index')
             ->with('success', 'Vacation request updated successfully.');
     }
-
 
     public function approvals(Request $request)
     {
@@ -246,9 +240,9 @@ class VacationController extends Controller
 
         return redirect()->route('vacation.approvals')->with('success', 'Vacation request approved.');
     }
+
     public function leaveBalanceForm(Request $request)
     {
         return view('vacation.leave_balance');
     }
-
 }

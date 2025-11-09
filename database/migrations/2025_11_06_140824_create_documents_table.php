@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('documents', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('type',5);
+            $table->string('type', 5);
         });
 
         Schema::create('document_versions', function (Blueprint $table) {
@@ -24,6 +24,7 @@ return new class extends Migration
             $table->string('comment');
         });
     }
+
     /**
      * Reverse the migrations.
      */

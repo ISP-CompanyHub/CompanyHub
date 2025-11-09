@@ -30,8 +30,8 @@ class Vacation extends Model
      */
     protected $casts = [
         'submission_date' => 'datetime',
-        'vacation_start'  => 'datetime',
-        'vacation_end'    => 'datetime',
+        'vacation_start' => 'datetime',
+        'vacation_end' => 'datetime',
     ];
 
     /**

@@ -5,12 +5,12 @@ use App\Http\Controllers\CompanyStructureController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\HolidayController;
 use App\Http\Controllers\InterviewController;
 use App\Http\Controllers\JobOfferController;
-use App\Http\Controllers\HolidayController;
 use App\Http\Controllers\JobPostingController;
-use App\Http\Controllers\VacationController;
 use App\Http\Controllers\Settings;
+use App\Http\Controllers\VacationController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -75,14 +75,13 @@ Route::middleware(['auth', 'verified', 'role:manager'])->group(function () {
         ->name('job-offers.download');
 });
 
-
 // Documents
 Route::middleware(['auth'])->group(function () {
     Route::resource('documents', DocumentController::class);
 });
 
-//Vacations
-Route::middleware(['auth'])->group(function (){
+// Vacations
+Route::middleware(['auth'])->group(function () {
     Route::resource('holidays', HolidayController::class);
 
     Route::get('vacation/approvals', [VacationController::class, 'approvals'])->name('vacation.approvals');
@@ -128,6 +127,5 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('company-structure', [CompanyStructureController::class, 'index'])->name('company-structure.index');
     Route::post('company-structure/pdf', [CompanyStructureController::class, 'generatePdf'])->name('company-structure.pdf');
 });
-
 
 require __DIR__.'/auth.php';

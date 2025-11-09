@@ -3,9 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Department;
-use Illuminate\Http\Request;
-use Illuminate\View\View;
 use App\Services\CompanyStructurePdfService;
+use Illuminate\View\View;
 
 class CompanyStructureController extends Controller
 {

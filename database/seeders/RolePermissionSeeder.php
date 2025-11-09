@@ -70,7 +70,7 @@ class RolePermissionSeeder extends Seeder
             'view employees',
             'edit employee profile',
             'create employee profile',
-            'generate company structure'
+            'generate company structure',
         ];
 
         foreach ($permissions as $permission) {
@@ -93,7 +93,7 @@ class RolePermissionSeeder extends Seeder
             'view holidays',
             'view leave balances',
             'view employee profile',
-            'generate company structure'
+            'generate company structure',
         ]);
 
         // System Administrator role - full CRUD on job postings, candidates, interviews, vacations, holidays, profiles

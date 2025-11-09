@@ -31,7 +31,7 @@ class User extends Authenticatable
         'status',
         'email',
         'password',
-        'department_id'
+        'department_id',
     ];
 
     /**
@@ -55,7 +55,7 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
             'date_of_birth' => 'date',
-            'status' => UserStatus::class
+            'status' => UserStatus::class,
         ];
     }
 
@@ -65,7 +65,7 @@ class User extends Authenticatable
     public function initials(): string
     {
         return Str::of($this->name)
-            ->substr(0, 1) . Str::of($this->surname)
+            ->substr(0, 1).Str::of($this->surname)
             ->substr(0, 1);
     }
 

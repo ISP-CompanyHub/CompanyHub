@@ -15,11 +15,11 @@ class DocumentController extends Controller
      */
     public function index(): View
     {
-        //$documents = Document::latest()
-            //->paginate(10);
-        $documents =[
-        (object) ['id' => 1,'name' => 'Document1', 'type' => 'PDF'],
-        (object) ['id' => 2,'name' => 'Document2', 'type' => 'DOCX']];
+        // $documents = Document::latest()
+        // ->paginate(10);
+        $documents = [
+            (object) ['id' => 1, 'name' => 'Document1', 'type' => 'PDF'],
+            (object) ['id' => 2, 'name' => 'Document2', 'type' => 'DOCX']];
 
         return view('documents.index', compact('documents'));
     }
@@ -49,7 +49,8 @@ class DocumentController extends Controller
      */
     public function show($id): View
     {
-        $documents = (object) ['id' => 1,'name' => 'Document1', 'type' => 'PDF', 'count' => 1, 'change_date' => now(), 'filename' => 'failas1', 'comment' => 'file :)', 'file_url' => '#'];
+        $documents = (object) ['id' => 1, 'name' => 'Document1', 'type' => 'PDF', 'count' => 1, 'change_date' => now(), 'filename' => 'failas1', 'comment' => 'file :)', 'file_url' => '#'];
+
         return view('documents.show', compact('documents'));
     }
 
@@ -58,7 +59,8 @@ class DocumentController extends Controller
      */
     public function edit($id): View
     {
-        $document =(object) ['id' => 1,'name' => 'Document1', 'type' => 'PDF', 'count' => 1, 'change_date' => now(), 'filename' => 'failas1', 'comment' => 'file :)', 'file_url' => '#'];
+        $document = (object) ['id' => 1, 'name' => 'Document1', 'type' => 'PDF', 'count' => 1, 'change_date' => now(), 'filename' => 'failas1', 'comment' => 'file :)', 'file_url' => '#'];
+
         return view('documents.edit', compact('document'));
     }
 
@@ -79,7 +81,7 @@ class DocumentController extends Controller
      */
     public function destroy($id): RedirectResponse
     {
-        //$jobPosting->delete();
+        // $jobPosting->delete();
 
         return redirect()
             ->route('documents.index')

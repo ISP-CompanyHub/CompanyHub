@@ -58,12 +58,11 @@
                         </div>
 
                         <div>
-                            <label for="salary"
-                                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                            <label for="salary" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                                 {{ __('Salary Offered ($)') }} <span class="text-red-500">*</span>
                             </label>
-                            <input type="number" name="salary" id="salary" step="0.01"
-                                value="{{ old('salary') }}" required
+                            <input type="number" name="salary" id="salary" step="0.01" value="{{ old('salary') }}"
+                                required
                                 class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-gray-100">
                             @error('salary')
                                 <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
@@ -71,8 +70,7 @@
                         </div>
 
                         <div>
-                            <label for="start_date"
-                                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                            <label for="start_date" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                                 {{ __('Start Date') }} <span class="text-red-500">*</span>
                             </label>
                             <input type="date" name="start_date" id="start_date" value="{{ old('start_date') }}"
@@ -84,12 +82,11 @@
                         </div>
 
                         <div>
-                            <label for="expires_at"
-                                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                            <label for="expires_at" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                                 {{ __('Offer Expires On') }} <span class="text-red-500">*</span>
                             </label>
-                            <input type="date" name="expires_at" id="expires_at"
-                                value="{{ old('expires_at') }}" required
+                            <input type="date" name="expires_at" id="expires_at" value="{{ old('expires_at') }}"
+                                required
                                 class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-gray-100">
                             @error('expires_at')
                                 <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
@@ -99,8 +96,7 @@
                         </div>
 
                         <div>
-                            <label for="benefits"
-                                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                            <label for="benefits" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                                 {{ __('Benefits & Perks') }}
                             </label>
                             <textarea name="benefits" id="benefits" rows="4"

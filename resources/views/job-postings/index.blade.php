@@ -50,8 +50,7 @@
                         </div>
 
                         <div>
-                            <label for="description"
-                                class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                            <label for="description" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
                                 {{ __('Description') }}
                             </label>
                             <textarea name="description" id="description" rows="6"
@@ -63,8 +62,7 @@
 
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
-                                <label for="location"
-                                    class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                                <label for="location" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
                                     {{ __('Location') }}
                                 </label>
                                 <input type="text" name="location" id="location" value="{{ old('location') }}"
@@ -88,8 +86,7 @@
                                     <option value="Part-time"
                                         {{ old('employment_type') == 'Part-time' ? 'selected' : '' }}>
                                         {{ __('Part-time') }}</option>
-                                    <option value="Contract"
-                                        {{ old('employment_type') == 'Contract' ? 'selected' : '' }}>
+                                    <option value="Contract" {{ old('employment_type') == 'Contract' ? 'selected' : '' }}>
                                         {{ __('Contract') }}</option>
                                     <option value="Internship"
                                         {{ old('employment_type') == 'Internship' ? 'selected' : '' }}>
@@ -103,12 +100,11 @@
 
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
-                                <label for="salary_min"
-                                    class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                                <label for="salary_min" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
                                     {{ __('Minimum Salary') }}
                                 </label>
-                                <input type="number" name="salary_min" id="salary_min"
-                                    value="{{ old('salary_min') }}" step="0.01" min="0"
+                                <input type="number" name="salary_min" id="salary_min" value="{{ old('salary_min') }}"
+                                    step="0.01" min="0"
                                     class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100">
                                 @error('salary_min')
                                     <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
@@ -116,12 +112,11 @@
                             </div>
 
                             <div>
-                                <label for="salary_max"
-                                    class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                                <label for="salary_max" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
                                     {{ __('Maximum Salary') }}
                                 </label>
-                                <input type="number" name="salary_max" id="salary_max"
-                                    value="{{ old('salary_max') }}" step="0.01" min="0"
+                                <input type="number" name="salary_max" id="salary_max" value="{{ old('salary_max') }}"
+                                    step="0.01" min="0"
                                     class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100">
                                 @error('salary_max')
                                     <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
@@ -249,7 +244,8 @@
                                 </svg>
                                 <p class="mt-4 text-sm">{{ __('No job postings found.') }}</p>
                                 @can('create job postings')
-                                    <button @click="$root.querySelector('[x-id]').scrollIntoView({ behavior: 'smooth', block: 'start' }); $root.querySelector('[x-id]').__x.$data.open = true"
+                                    <button
+                                        @click="$root.querySelector('[x-id]').scrollIntoView({ behavior: 'smooth', block: 'start' }); $root.querySelector('[x-id]').__x.$data.open = true"
                                         class="mt-2 inline-block text-blue-600 hover:text-blue-900 cursor-pointer">
                                         {{ __('Create your first job posting') }}
                                     </button>

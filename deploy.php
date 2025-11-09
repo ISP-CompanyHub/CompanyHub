@@ -36,7 +36,7 @@ task('deploy:ensure_node', function () {
     $ver = preg_replace('/^v/', '', trim($output));
     $parts = explode('.', $ver);
     if ((int) $parts[0] < 18) {
-        writeln('<error>Node.js version 18 or higher is required. Detected: ' . $output . '</error>');
+        writeln('<error>Node.js version 18 or higher is required. Detected: '.$output.'</error>');
         exit(1);
     }
 });

@@ -26,6 +26,7 @@ class DepartmentController extends Controller
     public function edit(Department $department)
     {
         $users = User::all();
+
         return view('departments.edit', compact('department', 'users'));
     }
 
@@ -42,5 +43,4 @@ class DepartmentController extends Controller
         return redirect()->route('departments.index')
             ->with('success', __('Department updated successfully.'));
     }
-
 }

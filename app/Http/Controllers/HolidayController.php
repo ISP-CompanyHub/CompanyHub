@@ -3,10 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Holiday;
-use Illuminate\Http\Request;
-use Illuminate\View\View;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\View\View;
 
 class HolidayController extends Controller
 {
@@ -23,11 +23,11 @@ class HolidayController extends Controller
             $items = collect([
                 (object) ['id' => 1, 'holiday_date' => Carbon::parse('2025-01-01'), 'title' => "New Year's Day",             'type' => 'national'],
                 (object) ['id' => 2, 'holiday_date' => Carbon::parse('2025-03-08'), 'title' => "International Women's Day", 'type' => 'observance'],
-                (object) ['id' => 3, 'holiday_date' => Carbon::parse('2025-05-01'), 'title' => "Labor Day",                 'type' => 'national'],
-                (object) ['id' => 4, 'holiday_date' => Carbon::parse('2025-07-04'), 'title' => "Independence Day",         'type' => 'national'],
-                (object) ['id' => 5, 'holiday_date' => Carbon::parse('2025-08-15'), 'title' => "Company Day Off",          'type' => 'company'],
-                (object) ['id' => 6, 'holiday_date' => Carbon::parse('2025-11-28'), 'title' => "Founders Day",             'type' => 'company'],
-                (object) ['id' => 7, 'holiday_date' => Carbon::parse('2025-12-25'), 'title' => "Christmas Day",            'type' => 'national'],
+                (object) ['id' => 3, 'holiday_date' => Carbon::parse('2025-05-01'), 'title' => 'Labor Day',                 'type' => 'national'],
+                (object) ['id' => 4, 'holiday_date' => Carbon::parse('2025-07-04'), 'title' => 'Independence Day',         'type' => 'national'],
+                (object) ['id' => 5, 'holiday_date' => Carbon::parse('2025-08-15'), 'title' => 'Company Day Off',          'type' => 'company'],
+                (object) ['id' => 6, 'holiday_date' => Carbon::parse('2025-11-28'), 'title' => 'Founders Day',             'type' => 'company'],
+                (object) ['id' => 7, 'holiday_date' => Carbon::parse('2025-12-25'), 'title' => 'Christmas Day',            'type' => 'national'],
             ])->sortByDesc(function ($h) {
                 return $h->holiday_date->getTimestamp();
             })->values();
@@ -75,8 +75,8 @@ class HolidayController extends Controller
     {
         $data = $request->validate([
             'holiday_date' => 'required|date',
-            'title'        => 'required|string|max:255',
-            'type'         => 'required|string|max:255',
+            'title' => 'required|string|max:255',
+            'type' => 'required|string|max:255',
         ]);
 
         Holiday::create($data);
