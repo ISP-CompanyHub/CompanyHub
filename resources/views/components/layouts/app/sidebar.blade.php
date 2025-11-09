@@ -143,6 +143,30 @@
                         @endcan
                     </x-layouts.sidebar-two-level-link-parent>
                 @endcanany
+				
+				@canany(['view salaries', 'generate monthly salary'])
+                    <x-layouts.sidebar-two-level-link-parent
+                        title="Financials"
+                        icon="fas-dollar-sign" :active="request()->routeIs('salaries.*')"
+                    >
+                        @can('view salaries')
+                            <x-layouts.sidebar-two-level-link
+                                href="{{ route('salaries.index') }}"
+                                icon="fas-file-invoice-dollar" :active="request()->routeIs('salaries.index')"
+                            >
+                                Salaries
+                            </x-layouts.sidebar-two-level-link>
+                        @endcan
+                        @can('generate monthly salary')
+                            <x-layouts.sidebar-two-level-link
+                                href="{{ route('salaries.monthly') }}"
+                                icon="fas-calculator" :active="request()->routeIs('salaries.monthly')"
+                            >
+                                Monthly Calculation
+                            </x-layouts.sidebar-two-level-link>
+                        @endcan
+                    </x-layouts.sidebar-two-level-link-parent>
+                @endcanany
             </ul>
         </nav>
     </div>
