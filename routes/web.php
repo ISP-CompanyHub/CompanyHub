@@ -11,6 +11,7 @@ use App\Http\Controllers\JobOfferController;
 use App\Http\Controllers\JobPostingController;
 use App\Http\Controllers\Settings;
 use App\Http\Controllers\VacationController;
+use App\Http\Controllers\SalaryController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -73,6 +74,12 @@ Route::middleware(['auth', 'verified', 'role:manager'])->group(function () {
         ->name('job-offers.send');
     Route::get('job-offers/{jobOffer}/download', [JobOfferController::class, 'download'])
         ->name('job-offers.download');
+});
+
+// Salary Management (Administrator | Manager)
+Route::middleware(['auth', 'verified', 'role:administrator|manager'])->group(function () {
+    Route::get('salaries/monthly', [SalaryController::class, 'monthly'])->name('salaries.monthly');
+    Route::resource('salaries', SalaryController::class);
 });
 
 // Documents

@@ -71,6 +71,13 @@ class RolePermissionSeeder extends Seeder
             'edit employee profile',
             'create employee profile',
             'generate company structure',
+
+            // Salaries
+            'view salaries',
+            'create salaries',
+            'edit salaries',
+            'delete salaries',
+            'generate monthly salary',
         ];
 
         foreach ($permissions as $permission) {
@@ -134,6 +141,13 @@ class RolePermissionSeeder extends Seeder
             'view employees',
             'edit employee profile',
             'create employee profile',
+			
+			                        
+            'view salaries',
+            'create salaries',
+            'edit salaries',
+            'delete salaries',
+            'generate monthly salary',
         ]);
 
         // Manager role - can do everything (sync all existing permissions)
