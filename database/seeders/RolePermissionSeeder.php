@@ -115,8 +115,6 @@ class RolePermissionSeeder extends Seeder
             'edit interviews',
             'delete interviews',
 
-            'view job offers',
-
             'view documents',
             'create documents',
             'edit documents',
