@@ -21,13 +21,22 @@ class JobOfferController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(): View
+    public function index(Request $request): View
     {
         $jobOffers = JobOffer::with(['candidate', 'jobPosting'])
             ->latest()
             ->paginate(15);
 
-        return view('job-offers.index', compact('jobOffers'));
+        // Get candidates available for job offers
+        $candidates = Candidate::where('status', 'interviewed')
+            ->doesntHave('jobOffer')
+            ->with('jobPosting')
+            ->get();
+
+        // Pre-selected candidate if coming from candidate page
+        $selectedCandidateId = $request->input('candidate_id');
+
+        return view('job-offers.index', compact('jobOffers', 'candidates', 'selectedCandidateId'));
     }
 
     /**

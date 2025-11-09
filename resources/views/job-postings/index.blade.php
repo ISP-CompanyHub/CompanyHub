@@ -1,18 +1,7 @@
 <x-layouts.app>
-    <div class="mb-6 flex justify-between items-center">
-        <div>
-            <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">{{ __('Job Postings') }}</h1>
-            <p class="text-gray-600 dark:text-gray-400 mt-1">{{ __('Manage job postings') }}</p>
-        </div>
-        @can('create job postings')
-            <a href="{{ route('job-postings.create') }}"
-                class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg inline-flex items-center">
-                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-                </svg>
-                {{ __('Create Job Posting') }}
-            </a>
-        @endcan
+    <div class="mb-6">
+        <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">{{ __('Job Postings') }}</h1>
+        <p class="text-gray-600 dark:text-gray-400 mt-1">{{ __('Manage job postings') }}</p>
     </div>
 
     @if (session('success'))
@@ -20,6 +9,148 @@
             {{ session('success') }}
         </div>
     @endif
+
+    @can('create job postings')
+        <!-- Create Job Posting Form -->
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6 mb-6"
+            x-data="{ open: true }" x-id="['job-posting-form']">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-lg font-semibold text-gray-800 dark:text-gray-100">
+                    {{ __('Create New Job Posting') }}
+                </h2>
+                <button @click="open = !open" type="button"
+                    class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg inline-flex items-center gap-2">
+                    <svg x-show="!open" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                    </svg>
+                    <span x-show="!open">{{ __('Show Form') }}</span>
+                    <span x-show="open">{{ __('Hide Form') }}</span>
+                    <svg x-show="open" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
+                    </svg>
+                </button>
+            </div>
+
+            <div x-show="open" x-collapse>
+                <form action="{{ route('job-postings.store') }}" method="POST">
+                    @csrf
+
+                    <x-form-errors :errors="$errors" />
+
+                    <div class="space-y-6">
+                        <div>
+                            <label for="title" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                                {{ __('Job Title') }} <span class="text-red-500">*</span>
+                            </label>
+                            <input type="text" name="title" id="title" value="{{ old('title') }}" required
+                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100">
+                            @error('title')
+                                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                            @enderror
+                        </div>
+
+                        <div>
+                            <label for="description"
+                                class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                                {{ __('Description') }}
+                            </label>
+                            <textarea name="description" id="description" rows="6"
+                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100">{{ old('description') }}</textarea>
+                            @error('description')
+                                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                            @enderror
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label for="location"
+                                    class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                                    {{ __('Location') }}
+                                </label>
+                                <input type="text" name="location" id="location" value="{{ old('location') }}"
+                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100">
+                                @error('location')
+                                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                                @enderror
+                            </div>
+
+                            <div>
+                                <label for="employment_type"
+                                    class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                                    {{ __('Employment Type') }}
+                                </label>
+                                <select name="employment_type" id="employment_type"
+                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100">
+                                    <option value="">{{ __('Select type') }}</option>
+                                    <option value="Full-time"
+                                        {{ old('employment_type') == 'Full-time' ? 'selected' : '' }}>
+                                        {{ __('Full-time') }}</option>
+                                    <option value="Part-time"
+                                        {{ old('employment_type') == 'Part-time' ? 'selected' : '' }}>
+                                        {{ __('Part-time') }}</option>
+                                    <option value="Contract"
+                                        {{ old('employment_type') == 'Contract' ? 'selected' : '' }}>
+                                        {{ __('Contract') }}</option>
+                                    <option value="Internship"
+                                        {{ old('employment_type') == 'Internship' ? 'selected' : '' }}>
+                                        {{ __('Internship') }}</option>
+                                </select>
+                                @error('employment_type')
+                                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label for="salary_min"
+                                    class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                                    {{ __('Minimum Salary') }}
+                                </label>
+                                <input type="number" name="salary_min" id="salary_min"
+                                    value="{{ old('salary_min') }}" step="0.01" min="0"
+                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100">
+                                @error('salary_min')
+                                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                                @enderror
+                            </div>
+
+                            <div>
+                                <label for="salary_max"
+                                    class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                                    {{ __('Maximum Salary') }}
+                                </label>
+                                <input type="number" name="salary_max" id="salary_max"
+                                    value="{{ old('salary_max') }}" step="0.01" min="0"
+                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100">
+                                @error('salary_max')
+                                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="flex items-center">
+                                <input type="checkbox" name="is_active" value="1"
+                                    {{ old('is_active', true) ? 'checked' : '' }}
+                                    class="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600">
+                                <span
+                                    class="ml-2 text-sm text-gray-700 dark:text-gray-300">{{ __('Active (visible to candidates)') }}</span>
+                            </label>
+                        </div>
+
+                        <div class="flex items-center justify-end pt-4 border-t border-gray-200 dark:border-gray-700">
+                            <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg">
+                                {{ __('Create Job Posting') }}
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    @endcan
+
+    <!-- Job Postings Table -->
 
     <div
         class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
@@ -118,10 +249,10 @@
                                 </svg>
                                 <p class="mt-4 text-sm">{{ __('No job postings found.') }}</p>
                                 @can('create job postings')
-                                    <a href="{{ route('job-postings.create') }}"
-                                        class="mt-2 inline-block text-blue-600 hover:text-blue-900">
+                                    <button @click="$root.querySelector('[x-id]').scrollIntoView({ behavior: 'smooth', block: 'start' }); $root.querySelector('[x-id]').__x.$data.open = true"
+                                        class="mt-2 inline-block text-blue-600 hover:text-blue-900 cursor-pointer">
                                         {{ __('Create your first job posting') }}
-                                    </a>
+                                    </button>
                                 @endcan
                             </td>
                         </tr>

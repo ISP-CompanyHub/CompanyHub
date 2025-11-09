@@ -158,7 +158,7 @@
                         class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
                         <h2 class="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-4">{{ __('Job Offer') }}</h2>
                         <p class="text-gray-500 dark:text-gray-400 text-center py-4">{{ __('No job offer sent yet.') }}</p>
-                        <a href="{{ route('job-offers.create', ['candidate_id' => $candidate->id]) }}"
+                        <a href="{{ route('job-offers.index', ['candidate_id' => $candidate->id]) }}"
                             class="mt-2 inline-block text-blue-600 hover:text-blue-900 dark:text-blue-400 text-sm">
                             {{ __('+ Create Job Offer') }}
                         </a>
