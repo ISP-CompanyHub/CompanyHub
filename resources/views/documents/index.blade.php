@@ -39,6 +39,12 @@
                             class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                             {{ __('Uploader') }}
                         </th>
+
+                        <th
+                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                            {{ __('Comment') }}
+                        </th>
+
                         <th
                             class="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                             {{ __('Actions') }}
@@ -57,29 +63,46 @@
                                 {{ $document->type ?? '-' }}
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
-                                {{ $document->owner_id ?? '-' }}
+                                {{ ($document->user->name ?? '-') . ' ' . ($document->user->surname ?? '') }}
                             </td>
+
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
+                                {{ $document->versions()->latest('version_number')->first()->comment  ?? '-'}}
+                            </td>
+
                             <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium flex items-center justify-end space-x-2">
-                                <a href="{{ route('documents.show', $document-> id) }}"
-                                    class="text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300 mr-3">
-                                    {{ __('View') }}
-                                </a>
-                                @can('edit documents')
-                                    <a href="{{ route('documents.edit', $document->id) }}"
+                                
+                                @if ($document->user_id === Auth::id())
+                                
+                                    @can('edit documents')
+                                    <a href="{{ route('documents.edit', $document) }}"
                                         class="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300 mr-3">
                                         {{ __('Edit') }}
                                     </a>
+                                    @endcan
+
+                                    @can('delete documents')
+                                        <form action="{{ route('documents.destroy', $document) }}" method="POST"
+                                        onsubmit="return confirm('{{ __('Are you sure you want to delete this document?') }}')">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300 mr-3">
+                                                {{ __('Delete') }}
+                                            </button>
+                                        </form>
+                                    @endcan
+                                @endif
+                                
+                                @can('view documents')
+                                    <a href="{{ route('documents.download', $document) }}" download
+                                        class="inline-flex items-center justify-center p-2 bg-gray-200 dark:bg-gray-700 rounded-md hover:bg-gray-300 dark:hover:bg-gray-600"
+                                        title="Download">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
+                                        </svg>
+                                    </a>
                                 @endcan
-                                @can('edit documents')
-                                <form action="{{ route('documents.destroy', $document -> id) }}" method="POST"
-                                onsubmit="return confirm('{{ __('Are you sure you want to delete this document?') }}')">
-                                @csrf
-                                @method('DELETE')
-                                    <button type="submit" class="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300 mr-3">
-                                        {{ __('Delete') }}
-                                    </button>
-                                </form>
-                                @endcan
+ 
                             </td>
                         </tr>
                     @empty
@@ -98,11 +121,5 @@
                 </tbody>
             </table>
         </div>
-
-        {{-- @if ($documents->hasPages())--}}
-           {{-- <div class="px-6 py-4 border-t border-gray-200 dark:border-gray-700">
-                {{ $documents->links() }}
-            </div>
-        @endif --}}
     </div>
 </x-layouts.app>

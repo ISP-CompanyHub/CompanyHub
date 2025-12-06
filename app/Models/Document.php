@@ -19,18 +19,17 @@ class Document extends Model
     protected $fillable = [
         'name',
         'type',
-        'owner_id',
+        'user_id',
     ];
 
-    /**
-     * Get the versions for the document.
-     */
+    public $timestamps = false;
+
     public function versions(): HasMany
     {
         return $this->hasMany(DocumentVersion::class);
     }
 
-    public function owner(): BelongsTo
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
