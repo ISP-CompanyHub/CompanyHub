@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Vacation extends Model
 {
@@ -17,6 +19,7 @@ class Vacation extends Model
      * The attributes that are mass assignable.
      */
     protected $fillable = [
+        'user_id',
         'submission_date',
         'vacation_start',
         'vacation_end',
@@ -45,6 +48,10 @@ class Vacation extends Model
      * Uncomment or adapt these to your app's needs.
      */
 
+    public function belongsToUser(): BelongsTo
+    {
+        return $this->belongsTo(User::class,'user_id');
+    }
     // public const STATUS_PENDING  = 'pending';
     // public const STATUS_APPROVED = 'approved';
     // public const STATUS_REJECTED = 'rejected';

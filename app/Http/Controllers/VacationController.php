@@ -18,73 +18,7 @@ class VacationController extends Controller
      */
     public function index()
     {
-        $vacationRequests = collect([
-            // Vacation request #1
-            (object) [
-                'uid' => 'vac-1',
-                'model' => 'vacation',
-                'model_id' => 1,
-                'submission_date' => Carbon::parse('2025-10-01 09:15'),
-                'start' => Carbon::parse('2025-12-15'),
-                'end' => Carbon::parse('2025-12-20'),
-                'type' => 'Paid leave',
-                'status' => 'approved',
-                'comments' => 'Family trip to the mountains.',
-            ],
-
-            // Vacation request #2
-            (object) [
-                'uid' => 'vac-2',
-                'model' => 'vacation',
-                'model_id' => 2,
-                'submission_date' => Carbon::now()->subDays(10),
-                'start' => Carbon::now()->addDays(7),
-                'end' => Carbon::now()->addDays(10),
-                'type' => 'Sick leave',
-                'status' => 'pending',
-                'comments' => 'Medical appointment and recovery.',
-            ],
-
-            // Holiday entry (treated as holiday in combined list)
-            (object) [
-                'uid' => 'hol-1',
-                'model' => 'holiday',
-                'model_id' => 1,
-                'submission_date' => null,
-                'start' => Carbon::parse('2025-12-25'),
-                'end' => Carbon::parse('2025-12-25'),
-                'type' => 'Christmas Day',
-                'status' => 'holiday',
-                'comments' => 'National holiday',
-            ],
-
-            // Another holiday
-            (object) [
-                'uid' => 'hol-2',
-                'model' => 'holiday',
-                'model_id' => 2,
-                'submission_date' => null,
-                'start' => Carbon::parse('2026-01-01'),
-                'end' => Carbon::parse('2026-01-01'),
-                'type' => "New Year's Day",
-                'status' => 'holiday',
-                'comments' => 'National holiday',
-            ],
-
-            // Vacation request #3
-            (object) [
-                'uid' => 'vac-3',
-                'model' => 'vacation',
-                'model_id' => 3,
-                'submission_date' => Carbon::parse('2025-09-12 14:30'),
-                'start' => Carbon::parse('2025-11-05'),
-                'end' => Carbon::parse('2025-11-07'),
-                'type' => 'Unpaid leave',
-                'status' => 'rejected',
-                'comments' => 'Personal reasons — request denied due to schedule conflict.',
-            ],
-        ]);
-
+        $vacationRequests = Vacation::all();
         // For the quick preview you can just return the collection/array.
         return view('vacation.index', compact('vacationRequests'));
     }
