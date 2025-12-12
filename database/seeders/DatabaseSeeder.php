@@ -134,5 +134,6 @@ class DatabaseSeeder extends Seeder
             ]
         );
         $this->call(VacationSeeder::class);
+        $this->call(HolidaySeeder::class);
     }
 }

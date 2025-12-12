@@ -19,63 +19,8 @@ class VacationController extends Controller
     public function index()
     {
         $vacationRequests = Vacation::all();
-        // For the quick preview you can just return the collection/array.
         return view('vacation.index', compact('vacationRequests'));
     }
-    /**
-     * Display a listing of the resource (combined vacations + holidays).
-     */
-
-    /**
-    public function index()
-    {
-        $perPage = 15;
-        $page = (int) request()->get('page', 1);
-
-        $vacations = Vacation::orderBy('vacation_start', 'desc')->get()->map(function ($v) {
-            return (object) [
-                'uid' => 'vac-' . $v->id,
-                'model' => 'vacation',
-                'model_id' => $v->id,
-                'submission_date' => $v->submission_date,
-                'start' => $v->vacation_start,
-                'end' => $v->vacation_end,
-                'type' => $v->type,
-                'status' => $v->status,
-                'comments' => $v->comments,
-            ];
-        });
-
-        $holidays = Holiday::orderBy('holiday_date', 'desc')->get()->map(function ($h) {
-            return (object) [
-                'uid' => 'hol-' . $h->id,
-                'model' => 'holiday',
-                'model_id' => $h->id,
-                'submission_date' => null,
-                'start' => $h->holiday_date,
-                'end' => $h->holiday_date,
-                'type' => $h->title,
-                'status' => 'holiday',
-                'comments' => $h->type ?? '',
-            ];
-        });
-
-        $items = $vacations->concat($holidays)
-            ->sortByDesc(function ($i) {
-                return $i->start ? $i->start->getTimestamp() : 0;
-            })->values();
-
-        $total = $items->count();
-        $results = $items->forPage($page, $perPage);
-
-        $paginator = new LengthAwarePaginator($results, $total, $perPage, $page, [
-            'path' => request()->url(),
-            'query' => request()->query(),
-        ]);
-
-        return view('vacation.index', ['vacationRequests' => $paginator]);
-    }
-     */
     public function create(): View
     {
         return view('vacation.create');
@@ -94,11 +39,15 @@ class VacationController extends Controller
 
         $data['submission_date'] = $data['submission_date'] ?? now();
 
+        // Add this line to assign the current user's ID
+        $data['user_id'] = auth()->id();
+
         Vacation::create($data);
 
         return redirect()->route('vacation.index')
             ->with('success', 'Vacation request created successfully.');
     }
+
 
     public function show(Vacation $vacationRequest)
     {
@@ -135,8 +84,7 @@ class VacationController extends Controller
 
     public function approvals(Request $request)
     {
-        // Only allow users who can view/approve vacations to access this page.
-        // You can change the permission name if you use a different one.
+
         if (! auth()->user()->can('view vacation requests') && ! auth()->user()->can('approve vacation requests')) {
             abort(403);
         }
@@ -179,4 +127,21 @@ class VacationController extends Controller
     {
         return view('vacation.leave_balance');
     }
+    public function reject(Request $request, Vacation $vacation)
+    {
+        // Check permission to approve (using same permission for rejection)
+        if (! auth()->user()->can('approve vacation requests')) {
+            abort(403);
+        }
+
+        // Only allow rejecting pending requests
+        if ($vacation->status !== 'pending') {
+            return redirect()->back()->with('error', 'Only pending requests can be rejected.');
+        }
+
+        $vacation->update(['status' => 'rejected']);
+
+        return redirect()->route('vacation.approvals')->with('success', 'Vacation request rejected.');
+    }
+
 }

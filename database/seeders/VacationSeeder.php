@@ -86,7 +86,7 @@ class VacationSeeder extends Seeder
 
         Vacation::firstOrCreate(
             [
-                'user_id' => User::where('name', 'Admin')->first()->id,
+                'user_id' => User::where('name', 'Test User4')->first()->id,
                 'submission_date' => '2023-11-05',
                 'vacation_start' => '2023-12-20',
                 'vacation_end' => '2023-12-21',
