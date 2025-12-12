@@ -107,6 +107,55 @@ class VacationSeeder extends Seeder
                 'comments' => 'Urgent family requirement.'
             ]
         );
+        Vacation::firstOrCreate(
+            [
+                'user_id' => User::where('name', 'Employee')->first()->id,
+                'submission_date' => '2025-01-05',
+                'vacation_start' => '2025-01-20',
+                'vacation_end' => '2025-01-22',
+                'type' => 'vacation',
+                'status' => 'approved',
+                'comments' => 'Winter break.'
+            ]
+        );
 
+// Entry 2: April 2025 (1 day)
+        Vacation::firstOrCreate(
+            [
+                'user_id' => User::where('name', 'Employee')->first()->id,
+                'submission_date' => '2025-03-25',
+                'vacation_start' => '2025-04-15',
+                'vacation_end' => '2025-04-15',
+                'type' => 'vacation',
+                'status' => 'approved',
+                'comments' => 'Personal day off.'
+            ]
+        );
+
+// Entry 3: August 2025 (5 days)
+        Vacation::firstOrCreate(
+            [
+                'user_id' => User::where('name', 'Employee')->first()->id,
+                'submission_date' => '2025-07-20',
+                'vacation_start' => '2025-08-10',
+                'vacation_end' => '2025-08-14',
+                'type' => 'vacation',
+                'status' => 'approved',
+                'comments' => 'Summer vacation.'
+            ]
+        );
+
+// Entry 4: December 2025 (2 days)
+        Vacation::firstOrCreate(
+            [
+                'user_id' => User::where('name', 'Employee')->first()->id,
+                'submission_date' => '2025-11-30',
+                'vacation_start' => '2025-12-28',
+                'vacation_end' => '2025-12-30',
+                'type' => 'vacation',
+                'status' => 'approved',
+                'comments' => 'Holidays.'
+            ]
+        );
     }
 }

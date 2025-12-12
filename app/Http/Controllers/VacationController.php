@@ -7,6 +7,7 @@ use App\Models\Vacation;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 
@@ -122,10 +123,80 @@ class VacationController extends Controller
 
         return redirect()->route('vacation.approvals')->with('success', 'Vacation request approved.');
     }
-
     public function leaveBalanceForm(Request $request)
     {
         return view('vacation.leave_balance');
+    }
+
+    public function leaveBalanceGenerate(Request $request)
+    {
+        $request->validate([
+            'vacation_start' => 'required|date',
+            'vacation_end'   => 'required|date|after_or_equal:vacation_start',
+        ]);
+
+        $start = Carbon::parse($request->vacation_start);
+        $end   = Carbon::parse($request->vacation_end);
+        $user  = Auth::user();
+
+        // 1. Calculate Earned Days (Accrual)
+        // 1 month = 1.67 days
+        $monthsWorked = $start->floatDiffInRealMonths($end);
+        $accruedDays  = round($monthsWorked * 1.67, 2);
+
+        // 2. Fetch ALL vacation records for history
+        $allVacations = Vacation::where('user_id', $user->id)
+            ->where(function ($query) use ($start, $end) {
+                $query->whereBetween('vacation_start', [$start, $end])
+                    ->orWhereBetween('vacation_end', [$start, $end])
+                    ->orWhere(function ($q) use ($start, $end) {
+                        $q->where('vacation_start', '<', $start)
+                            ->where('vacation_end', '>', $end);
+                    });
+            })
+            // Fetch all types so we can list them in history
+            ->orderBy('vacation_start', 'asc')
+            ->get();
+
+        // 3. Calculate "Vacation Taken" (Only deduct specific types)
+        $vacationDaysTaken = 0;
+
+        // Define which types reduce the balance
+        $deductibleTypes = ['vacation', 'vacation leave', 'paid time off'];
+
+        foreach ($allVacations as $vacation) {
+            $vStart = Carbon::parse($vacation->vacation_start);
+            $vEnd   = Carbon::parse($vacation->vacation_end);
+
+            // Clamp dates to the report window
+            $effectiveStart = $vStart->max($start);
+            $effectiveEnd   = $vEnd->min($end);
+
+            // Calculate intersection
+            if ($effectiveEnd->gte($effectiveStart)) {
+                // Check if this type consumes the balance
+                // We use strtolower to make it case-insensitive
+                if (in_array(strtolower($vacation->type), $deductibleTypes)) {
+                    $days = $effectiveStart->diffInDays($effectiveEnd) + 1;
+                    $vacationDaysTaken += $days;
+                }
+            }
+        }
+
+        // 4. Calculate Net Balance
+        $netBalance = $accruedDays - $vacationDaysTaken;
+
+        return view('vacation.leave_balance', [
+            'results' => [
+                'user'           => $user,
+                'start'          => $start,
+                'end'            => $end,
+                'accrued_days'   => $accruedDays,
+                'taken_days'     => $vacationDaysTaken,
+                'net_balance'    => $netBalance,
+                'vacations'      => $allVacations // Pass all records for the history list
+            ]
+        ]);
     }
     public function reject(Request $request, Vacation $vacation)
     {

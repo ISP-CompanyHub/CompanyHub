@@ -10,5 +10,6 @@ enum VacationStatus: string
     case EDUCATION = 'education';
     case REMOTE = 'remote';
     case EMERGENCY = 'emergency';
+    case VACATION = 'vacation';
 
 };
