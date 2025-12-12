@@ -129,23 +129,16 @@
     background: #4b5563;
 }
 
-/* ======================================== */
-/* CSS for Horizontal Org Chart            */
-/* ======================================== */
-
-/* The main container */
 .org-chart {
     padding-left: 20px;
 }
 
-/* All lists in the chart */
 .org-chart ul {
     position: relative;
-    padding-left: 2rem; /* Indentation for children */
+    padding-left: 2rem;
     list-style-type: none;
 }
 
-/* All list items */
 .org-chart li {
     position: relative;
     list-style-type: none;
@@ -153,19 +146,14 @@
     padding-bottom: 0.5rem;
 }
 
-/* * The ::before and ::after pseudo-elements create the
- * horizontal and vertical connecting lines.
- */
 .org-chart li::before,
 .org-chart li::after {
     content: '';
     position: absolute;
-    left: -1rem; /* Aligns with the parent's padding-left */
-    /* Matches Tailwind's border-gray-400 */
+    left: -1rem;
     border-color: #9CA3AF;
 }
 
-/* Horizontal line (from parent) */
 .org-chart li::before {
     border-top-width: 1px;
     top: 50%;
@@ -173,7 +161,6 @@
     height: 0;
 }
 
-/* Vertical line (connects siblings) */
 .org-chart li::after {
     border-left-width: 1px;
     top: 0;
@@ -181,59 +168,48 @@
     height: 100%;
 }
 
-/* --- Line adjustments for first/last/only child --- */
-
-/* First child: vertical line starts from the middle */
 .org-chart li:first-child::after {
     top: 50%;
     height: 50%;
 }
 
-/* Last child: vertical line ends at the middle */
 .org-chart li:last-child::after {
     height: 50%;
 }
 
-/* Only child: no vertical line, just the horizontal one */
 .org-chart li:only-child::after {
     display: none;
 }
 
-/* * Node Styling
- * We use classes to style the nodes themselves.
- */
 .org-chart .node {
     display: inline-block;
     padding: 0.5rem 1rem;
-    border-radius: 0.375rem; /* rounded-lg */
+    border-radius: 0.375rem;
     border-width: 1px;
-    /* shadow-sm */
     box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
     min-width: 200px;
-    margin-left: 0.5rem; /* Space from the connecting line */
+    margin-left: 0.5rem;
 }
 
-/* Department Node Styling */
 .org-chart .node-department {
-    background-color: #F9FAFB; /* bg-gray-50 */
-    border-color: #E5E7EB;     /* border-gray-200 */
-    color: #1F2937;            /* text-gray-800 */
+    background-color: #F9FAFB;
+    border-color: #E5E7EB;
+    color: #1F2937;
 }
 .dark .org-chart .node-department {
-    background-color: #374151; /* dark:bg-gray-700 */
-    border-color: #4B5563;     /* dark:border-gray-600 */
-    color: #F9FAFB;            /* dark:text-gray-100 */
+    background-color: #374151;
+    border-color: #4B5563;
+    color: #F9FAFB;
 }
 
-/* Employee Node Styling */
 .org-chart .node-employee {
-    background-color: #FFFFFF; /* bg-white */
-    border-color: #E5E7EB;     /* border-gray-200 */
-    color: #374151;            /* text-gray-700 */
-    font-size: 0.875rem;       /* text-sm */
+    background-color: #FFFFFF;
+    border-color: #E5E7EB;
+    color: #374151;
+    font-size: 0.875rem;
 }
 .dark .org-chart .node-employee {
-    background-color: #1F2937; /* dark:bg-gray-800 */
-    border-color: #4B5563;     /* dark:border-gray-700 */
-    color: #D1D5DB;            /* dark:text-gray-300 */
+    background-color: #1F2937;
+    border-color: #4B5563;
+    color: #D1D5DB;
 }
