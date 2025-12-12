@@ -76,7 +76,7 @@
                         {{ $department->name }}
                         @if($department->lead)
                             <span class="subtext">
-                                    {{ __('Lead') }}: {{ strtoupper($department->lead->name[0]) }}. {{ $department->lead->surname }}
+                                    {{ __('Lead') }}: {{ strtoupper($department->lead->name[0]) }}. {{ ucfirst($department->lead->surname) }}
                                 </span>
                         @endif
                     </div>

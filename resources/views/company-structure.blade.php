@@ -21,7 +21,7 @@
                             <span class="font-semibold">{{ $department->name }}</span>
                             @if($department->lead)
                                 <span class="block text-sm text-gray-500 dark:text-gray-400">
-                                    {{ __('Lead') }}: {{ $department->lead->name }}
+                                    {{ __('Lead') }}: {{ strtoupper($department->lead->name[0]) }}. {{ ucfirst($department->lead->surname) }}
                                 </span>
                             @endif
                         </div>
