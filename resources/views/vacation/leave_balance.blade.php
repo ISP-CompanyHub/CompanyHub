@@ -137,4 +137,19 @@
             </div>
         @endif
     </div>
+    @if(isset($pdf_download_content) && $pdf_download_content)
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                // Create a virtual link to trigger the download
+                const link = document.createElement('a');
+                link.href = "data:application/pdf;base64,{{ $pdf_download_content }}";
+                link.download = "leave_balance_report_{{ now()->format('Ymd') }}.pdf";
+
+                // Append, click, and remove
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            });
+        </script>
+    @endif
 </x-layouts.app>

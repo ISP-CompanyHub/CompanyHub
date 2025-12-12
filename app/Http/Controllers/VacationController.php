@@ -10,16 +10,15 @@ use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
 use Illuminate\View\View;
+use Barryvdh\DomPDF\Facade\Pdf;
+
 
 class VacationController extends Controller
 {
-    /**
-     * Mock data
-     * /
-     */
-    public function index()
+
+    public function index(Request $request)
     {
-        $vacationRequests = Vacation::all();
+        $vacationRequests = Vacation::all()->where('user_id', $request->user()->id);
         return view('vacation.index', compact('vacationRequests'));
     }
     public function create(): View
@@ -140,7 +139,6 @@ class VacationController extends Controller
         $user  = Auth::user();
 
         // 1. Calculate Earned Days (Accrual)
-        // 1 month = 1.67 days
         $monthsWorked = $start->floatDiffInRealMonths($end);
         $accruedDays  = round($monthsWorked * 1.67, 2);
 
@@ -154,14 +152,11 @@ class VacationController extends Controller
                             ->where('vacation_end', '>', $end);
                     });
             })
-            // Fetch all types so we can list them in history
             ->orderBy('vacation_start', 'asc')
             ->get();
 
-        // 3. Calculate "Vacation Taken" (Only deduct specific types)
+        // 3. Calculate "Vacation Taken"
         $vacationDaysTaken = 0;
-
-        // Define which types reduce the balance
         $deductibleTypes = ['vacation', 'vacation leave', 'paid time off'];
 
         foreach ($allVacations as $vacation) {
@@ -172,10 +167,7 @@ class VacationController extends Controller
             $effectiveStart = $vStart->max($start);
             $effectiveEnd   = $vEnd->min($end);
 
-            // Calculate intersection
             if ($effectiveEnd->gte($effectiveStart)) {
-                // Check if this type consumes the balance
-                // We use strtolower to make it case-insensitive
                 if (in_array(strtolower($vacation->type), $deductibleTypes)) {
                     $days = $effectiveStart->diffInDays($effectiveEnd) + 1;
                     $vacationDaysTaken += $days;
@@ -186,16 +178,31 @@ class VacationController extends Controller
         // 4. Calculate Net Balance
         $netBalance = $accruedDays - $vacationDaysTaken;
 
+        $results = [
+            'user'           => $user,
+            'start'          => $start,
+            'end'            => $end,
+            'accrued_days'   => $accruedDays,
+            'taken_days'     => $vacationDaysTaken,
+            'net_balance'    => $netBalance,
+            'vacations'      => $allVacations
+        ];
+
+        // CHECK IF PDF GENERATION IS REQUESTED
+        $pdfDownloadContent = null;
+        if ($request->has('generate_pdf') && $request->input('generate_pdf') == '1') {
+            $pdf = Pdf::loadView('vacation.leave_balance_pdf', ['results' => $results]);
+
+            // Optional: Set paper size
+            $pdf->setPaper('a4', 'portrait');
+
+            // Get content instead of downloading immediately
+            $pdfDownloadContent = base64_encode($pdf->output());
+        }
+
         return view('vacation.leave_balance', [
-            'results' => [
-                'user'           => $user,
-                'start'          => $start,
-                'end'            => $end,
-                'accrued_days'   => $accruedDays,
-                'taken_days'     => $vacationDaysTaken,
-                'net_balance'    => $netBalance,
-                'vacations'      => $allVacations // Pass all records for the history list
-            ]
+            'results' => $results,
+            'pdf_download_content' => $pdfDownloadContent
         ]);
     }
     public function reject(Request $request, Vacation $vacation)

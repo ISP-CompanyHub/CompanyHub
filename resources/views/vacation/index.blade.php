@@ -1,8 +1,8 @@
 <x-layouts.app>
     <div class="mb-6 flex justify-between items-center">
         <div>
-            <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">{{ __('Vacation & Holidays') }}</h1>
-            <p class="text-gray-600 dark:text-gray-400 mt-1">{{ __('All vacation requests and official holidays') }}</p>
+            <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">{{ __('Time off') }}</h1>
+            <p class="text-gray-600 dark:text-gray-400 mt-1">{{ __('All time off requests') }}</p>
         </div>
 
         <div class="flex items-center space-x-2">
@@ -41,7 +41,7 @@
             <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
                 <thead class="bg-gray-50 dark:bg-gray-700">
                 <tr>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">{{ __('User') }}</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">{{ __('Number') }}</th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">{{ __('Submission Date') }}</th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">{{ __('Start') }}</th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">{{ __('End') }}</th>
@@ -57,10 +57,8 @@
                     <tr class="hover:bg-gray-50 dark:hover:bg-gray-700">
                         <td class="px-6 py-4 whitespace-nowrap">
                             <div class="text-sm font-medium text-gray-900 dark:text-gray-100">
-{{--                                SVARBU - KAI REIKIA USER, NAUDOTI belongsToUser()->first()->..... --}}
-                                {{ $item->belongsToUser()->first()->name }}
+                                {{ $loop->iteration }}
                             </div>
-                            <div class="text-xs text-gray-500 dark:text-gray-400">{{ $item->model }}</div>
                         </td>
 
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
