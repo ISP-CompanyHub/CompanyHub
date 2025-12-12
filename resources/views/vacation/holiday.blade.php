@@ -1,7 +1,7 @@
 <x-layouts.app>
     <div class="mb-6 flex justify-between items-center">
         <div>
-            <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">{{ __('Official holidays') }}</h1>
+            <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">{{ __('Official Holidays') }}</h1>
             <p class="text-gray-600 dark:text-gray-400 mt-1">{{ __('Official company / national holidays') }}</p>
         </div>
 
