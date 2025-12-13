@@ -1,8 +1,8 @@
 <x-layouts.app>
     <div class="mb-6 flex justify-between items-center">
         <div>
-            <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">{{ __('Vacation & Holidays') }}</h1>
-            <p class="text-gray-600 dark:text-gray-400 mt-1">{{ __('All vacation requests and official holidays') }}</p>
+            <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">{{ __('Time off') }}</h1>
+            <p class="text-gray-600 dark:text-gray-400 mt-1">{{ __('All time off requests') }}</p>
         </div>
 
         <div class="flex items-center space-x-2">
@@ -53,12 +53,12 @@
 
                 <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
                 @forelse ($vacationRequests as $item)
+
                     <tr class="hover:bg-gray-50 dark:hover:bg-gray-700">
                         <td class="px-6 py-4 whitespace-nowrap">
                             <div class="text-sm font-medium text-gray-900 dark:text-gray-100">
-                                {{ $item->uid }}
+                                {{ $loop->iteration }}
                             </div>
-                            <div class="text-xs text-gray-500 dark:text-gray-400">{{ $item->model }}</div>
                         </td>
 
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
@@ -66,11 +66,11 @@
                         </td>
 
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
-                            {{ $item->start ? $item->start->format('Y-m-d') : '-' }}
+                            {{ $item->vacation_start ? $item->vacation_start->format('Y-m-d') : '-' }}
                         </td>
 
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
-                            {{ $item->end ? $item->end->format('Y-m-d') : '-' }}
+                            {{ $item->vacation_end ? $item->vacation_end->format('Y-m-d') : '-' }}
                         </td>
 
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">

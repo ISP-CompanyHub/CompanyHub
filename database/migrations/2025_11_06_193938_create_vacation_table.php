@@ -11,6 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
+        //vacation table
         Schema::create('vacation_request', function (Blueprint $table) {
             $table->id();
             $table->timestamp('submission_date');
@@ -19,7 +20,9 @@ return new class extends Migration
             $table->string('type');
             $table->string('status');
             $table->longText('comments');
+            $table->foreignId('user_id')->nullable(false)->constrained('users')->onDelete('cascade');
         });
+        //holiday table
         Schema::create('holiday', function (Blueprint $table) {
             $table->id();
             $table->timestamp('holiday_date');

@@ -105,6 +105,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('vacation/leave-balance', [VacationController::class, 'leaveBalanceGenerate'])
         ->name('vacation.leave_balance.generate');
     Route::resource('vacation', VacationController::class);
+    Route::post('/vacation/{vacation}/reject', [VacationController::class, 'reject'])->name('vacation.reject');
 
 });
 

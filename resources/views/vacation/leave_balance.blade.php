@@ -19,12 +19,6 @@
         </div>
     @endif
 
-    @if (session('error'))
-        <div class="bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded mb-4" role="alert">
-            {{ session('error') }}
-        </div>
-    @endif
-
     <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
         <form action="{{ route('vacation.leave_balance.generate') }}" method="POST">
             @csrf
@@ -33,7 +27,7 @@
                 <div>
                     <label for="vacation_start" class="block text-sm font-medium text-gray-700 dark:text-gray-300">{{ __('Start (date & time)') }}</label>
                     <input id="vacation_start" name="vacation_start" type="datetime-local"
-                           value="{{ old('vacation_start') }}"
+                           value="{{ old('vacation_start', isset($results) ? $results['start']->format('Y-m-d\TH:i') : '') }}"
                            required
                            class="mt-1 w-full border border-gray-200 dark:border-gray-600 rounded px-3 py-2 text-sm bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-100" />
                     @error('vacation_start') <p class="text-xs text-red-600 mt-1">{{ $message }}</p> @enderror
@@ -42,7 +36,7 @@
                 <div>
                     <label for="vacation_end" class="block text-sm font-medium text-gray-700 dark:text-gray-300">{{ __('End (date & time)') }}</label>
                     <input id="vacation_end" name="vacation_end" type="datetime-local"
-                           value="{{ old('vacation_end') }}"
+                           value="{{ old('vacation_end', isset($results) ? $results['end']->format('Y-m-d\TH:i') : '') }}"
                            required
                            class="mt-1 w-full border border-gray-200 dark:border-gray-600 rounded px-3 py-2 text-sm bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-100" />
                     @error('vacation_end') <p class="text-xs text-red-600 mt-1">{{ $message }}</p> @enderror
@@ -61,18 +55,96 @@
             </div>
         </form>
 
-        {{-- Optional: show calculation result if controller flashed it --}}
-        @if (session('leave_payload'))
-            @php $payload = session('leave_payload'); @endphp
-            <div class="mt-6 border-t pt-4">
-                <h3 class="text-lg font-medium text-gray-800 dark:text-gray-100">{{ __('Result') }}</h3>
-                <div class="text-sm text-gray-600 dark:text-gray-300 mt-2">
-                    <div><strong>{{ __('User') }}:</strong> {{ $payload['user']->name }} ({{ $payload['user']->email }})</div>
-                    <div><strong>{{ __('Start') }}:</strong> {{ $payload['vacation_start']->format('Y-m-d H:i') }}</div>
-                    <div><strong>{{ __('End') }}:</strong> {{ $payload['vacation_end']->format('Y-m-d H:i') }}</div>
-                    <div class="mt-2 text-xs text-gray-500">{{ __('If you checked Generate PDF, the PDF was returned as a download.') }}</div>
+        {{-- Results Section --}}
+        @if (isset($results))
+            <div class="mt-8 border-t dark:border-gray-700 pt-6">
+                <h3 class="text-lg font-bold text-gray-800 dark:text-gray-100 mb-4">{{ __('Balance Report') }}</h3>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                    <div class="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg border border-blue-100 dark:border-blue-800">
+                        <div class="text-sm text-blue-600 dark:text-blue-400 font-medium uppercase">{{ __('Earned (Accrued)') }}</div>
+                        <div class="text-2xl font-bold text-gray-800 dark:text-gray-100">{{ $results['accrued_days'] }} <span class="text-sm font-normal text-gray-500">days</span></div>
+                    </div>
+                    <div class="bg-orange-50 dark:bg-orange-900/20 p-4 rounded-lg border border-orange-100 dark:border-orange-800">
+                        <div class="text-sm text-orange-600 dark:text-orange-400 font-medium uppercase">{{ __('Vacation Taken') }}</div>
+                        <div class="text-2xl font-bold text-gray-800 dark:text-gray-100">{{ $results['taken_days'] }} <span class="text-sm font-normal text-gray-500">days</span></div>
+                    </div>
+                    <div class="bg-green-50 dark:bg-green-900/20 p-4 rounded-lg border border-green-100 dark:border-green-800">
+                        <div class="text-sm text-green-600 dark:text-green-400 font-medium uppercase">{{ __('Net Balance') }}</div>
+                        <div class="text-2xl font-bold text-gray-800 dark:text-gray-100">{{ $results['net_balance'] }} <span class="text-sm font-normal text-gray-500">days</span></div>
+                    </div>
+                </div>
+
+                {{-- Vacation History Table --}}
+                <h4 class="font-medium text-gray-700 dark:text-gray-300 mb-3">{{ __('Full Leave History in Period') }}</h4>
+                <div class="overflow-x-auto border border-gray-200 dark:border-gray-700 rounded-lg">
+                    <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                        <thead class="bg-gray-50 dark:bg-gray-700">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">{{ __('Type') }}</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">{{ __('Start Date') }}</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">{{ __('End Date') }}</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">{{ __('Days') }}</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">{{ __('Status') }}</th>
+                        </tr>
+                        </thead>
+                        <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+                        @forelse($results['vacations'] as $vacation)
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
+                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full
+                                        {{ match(strtolower($vacation->type)) {
+                                            'vacation' => 'bg-indigo-100 text-indigo-800',
+                                            'paid' => 'bg-green-100 text-green-800',
+                                            'sick' => 'bg-red-100 text-red-800',
+                                            'unpaid' => 'bg-gray-100 text-gray-800',
+                                            'education' => 'bg-purple-100 text-purple-800',
+                                            'remote' => 'bg-blue-100 text-blue-800',
+                                            'emergency' => 'bg-yellow-100 text-yellow-800',
+                                            default => 'bg-gray-100 text-gray-800'
+                                        } }}">
+                                        {{ ucfirst($vacation->type) }}
+                                    </span>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
+                                    {{ \Carbon\Carbon::parse($vacation->vacation_start)->format('Y-m-d H:i') }}
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
+                                    {{ \Carbon\Carbon::parse($vacation->vacation_end)->format('Y-m-d H:i') }}
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
+                                    {{ \Carbon\Carbon::parse($vacation->vacation_start)->diffInDays(\Carbon\Carbon::parse($vacation->vacation_end)) + 1 }}
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
+                                    {{ ucfirst($vacation->status) }}
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="5" class="px-6 py-4 text-center text-sm text-gray-500 dark:text-gray-400">
+                                    {{ __('No leave records found in this period.') }}
+                                </td>
+                            </tr>
+                        @endforelse
+                        </tbody>
+                    </table>
                 </div>
             </div>
         @endif
     </div>
+    @if(isset($pdf_download_content) && $pdf_download_content)
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                // Create a virtual link to trigger the download
+                const link = document.createElement('a');
+                link.href = "data:application/pdf;base64,{{ $pdf_download_content }}";
+                link.download = "leave_balance_report_{{ now()->format('Ymd') }}.pdf";
+
+                // Append, click, and remove
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            });
+        </script>
+    @endif
 </x-layouts.app>

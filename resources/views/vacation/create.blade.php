@@ -63,6 +63,10 @@
                         <option value="unpaid leave" {{ old('type') === 'unpaid leave' ? 'selected' : '' }}>{{ __('Unpaid leave') }}</option>
                         <option value="sick leave" {{ old('type') === 'sick leave' ? 'selected' : '' }}>{{ __('Sick leave') }}</option>
                         <option value="educational leave" {{ old('type') === 'educational leave' ? 'selected' : '' }}>{{ __('Educational leave') }}</option>
+                        <option value="remote leave" {{ old('type') === 'sick leave' ? 'selected' : '' }}>{{ __('Remote leave') }}</option>
+                        <option value="emergency leave" {{ old('type') === 'emergency leave' ? 'selected' : '' }}>{{ __('Emergency leave') }}</option>
+                        <option value="vacation leave" {{ old('type') === 'vacation leave' ? 'selected' : '' }}>{{ __('vacation leave') }}</option>
+
                     </select>
                     @error('type') <p class="text-xs text-red-600 mt-1">{{ $message }}</p> @enderror
                 </div>

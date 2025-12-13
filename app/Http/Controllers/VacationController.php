@@ -7,141 +7,20 @@ use App\Models\Vacation;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
 use Illuminate\View\View;
+use Barryvdh\DomPDF\Facade\Pdf;
+
 
 class VacationController extends Controller
 {
-    /**
-     * Mock data
-     * /
-     */
-    public function index()
+
+    public function index(Request $request)
     {
-        $vacationRequests = collect([
-            // Vacation request #1
-            (object) [
-                'uid' => 'vac-1',
-                'model' => 'vacation',
-                'model_id' => 1,
-                'submission_date' => Carbon::parse('2025-10-01 09:15'),
-                'start' => Carbon::parse('2025-12-15'),
-                'end' => Carbon::parse('2025-12-20'),
-                'type' => 'Paid leave',
-                'status' => 'approved',
-                'comments' => 'Family trip to the mountains.',
-            ],
-
-            // Vacation request #2
-            (object) [
-                'uid' => 'vac-2',
-                'model' => 'vacation',
-                'model_id' => 2,
-                'submission_date' => Carbon::now()->subDays(10),
-                'start' => Carbon::now()->addDays(7),
-                'end' => Carbon::now()->addDays(10),
-                'type' => 'Sick leave',
-                'status' => 'pending',
-                'comments' => 'Medical appointment and recovery.',
-            ],
-
-            // Holiday entry (treated as holiday in combined list)
-            (object) [
-                'uid' => 'hol-1',
-                'model' => 'holiday',
-                'model_id' => 1,
-                'submission_date' => null,
-                'start' => Carbon::parse('2025-12-25'),
-                'end' => Carbon::parse('2025-12-25'),
-                'type' => 'Christmas Day',
-                'status' => 'holiday',
-                'comments' => 'National holiday',
-            ],
-
-            // Another holiday
-            (object) [
-                'uid' => 'hol-2',
-                'model' => 'holiday',
-                'model_id' => 2,
-                'submission_date' => null,
-                'start' => Carbon::parse('2026-01-01'),
-                'end' => Carbon::parse('2026-01-01'),
-                'type' => "New Year's Day",
-                'status' => 'holiday',
-                'comments' => 'National holiday',
-            ],
-
-            // Vacation request #3
-            (object) [
-                'uid' => 'vac-3',
-                'model' => 'vacation',
-                'model_id' => 3,
-                'submission_date' => Carbon::parse('2025-09-12 14:30'),
-                'start' => Carbon::parse('2025-11-05'),
-                'end' => Carbon::parse('2025-11-07'),
-                'type' => 'Unpaid leave',
-                'status' => 'rejected',
-                'comments' => 'Personal reasons — request denied due to schedule conflict.',
-            ],
-        ]);
-
-        // For the quick preview you can just return the collection/array.
+        $vacationRequests = Vacation::all()->where('user_id', $request->user()->id);
         return view('vacation.index', compact('vacationRequests'));
     }
-    /**
-     * Display a listing of the resource (combined vacations + holidays).
-     */
-
-    /**
-    public function index()
-    {
-        $perPage = 15;
-        $page = (int) request()->get('page', 1);
-
-        $vacations = Vacation::orderBy('vacation_start', 'desc')->get()->map(function ($v) {
-            return (object) [
-                'uid' => 'vac-' . $v->id,
-                'model' => 'vacation',
-                'model_id' => $v->id,
-                'submission_date' => $v->submission_date,
-                'start' => $v->vacation_start,
-                'end' => $v->vacation_end,
-                'type' => $v->type,
-                'status' => $v->status,
-                'comments' => $v->comments,
-            ];
-        });
-
-        $holidays = Holiday::orderBy('holiday_date', 'desc')->get()->map(function ($h) {
-            return (object) [
-                'uid' => 'hol-' . $h->id,
-                'model' => 'holiday',
-                'model_id' => $h->id,
-                'submission_date' => null,
-                'start' => $h->holiday_date,
-                'end' => $h->holiday_date,
-                'type' => $h->title,
-                'status' => 'holiday',
-                'comments' => $h->type ?? '',
-            ];
-        });
-
-        $items = $vacations->concat($holidays)
-            ->sortByDesc(function ($i) {
-                return $i->start ? $i->start->getTimestamp() : 0;
-            })->values();
-
-        $total = $items->count();
-        $results = $items->forPage($page, $perPage);
-
-        $paginator = new LengthAwarePaginator($results, $total, $perPage, $page, [
-            'path' => request()->url(),
-            'query' => request()->query(),
-        ]);
-
-        return view('vacation.index', ['vacationRequests' => $paginator]);
-    }
-     */
     public function create(): View
     {
         return view('vacation.create');
@@ -160,11 +39,15 @@ class VacationController extends Controller
 
         $data['submission_date'] = $data['submission_date'] ?? now();
 
+        // Add this line to assign the current user's ID
+        $data['user_id'] = auth()->id();
+
         Vacation::create($data);
 
         return redirect()->route('vacation.index')
             ->with('success', 'Vacation request created successfully.');
     }
+
 
     public function show(Vacation $vacationRequest)
     {
@@ -201,8 +84,7 @@ class VacationController extends Controller
 
     public function approvals(Request $request)
     {
-        // Only allow users who can view/approve vacations to access this page.
-        // You can change the permission name if you use a different one.
+
         if (! auth()->user()->can('view vacation requests') && ! auth()->user()->can('approve vacation requests')) {
             abort(403);
         }
@@ -240,9 +122,104 @@ class VacationController extends Controller
 
         return redirect()->route('vacation.approvals')->with('success', 'Vacation request approved.');
     }
-
     public function leaveBalanceForm(Request $request)
     {
         return view('vacation.leave_balance');
     }
+
+    public function leaveBalanceGenerate(Request $request)
+    {
+        $request->validate([
+            'vacation_start' => 'required|date',
+            'vacation_end'   => 'required|date|after_or_equal:vacation_start',
+        ]);
+
+        $start = Carbon::parse($request->vacation_start);
+        $end   = Carbon::parse($request->vacation_end);
+        $user  = Auth::user();
+
+        // 1. Calculate Earned Days (Accrual)
+        $monthsWorked = $start->floatDiffInRealMonths($end);
+        $accruedDays  = round($monthsWorked * 1.67, 2);
+
+        // 2. Fetch ALL vacation records for history
+        $allVacations = Vacation::where('user_id', $user->id)
+            ->where(function ($query) use ($start, $end) {
+                $query->whereBetween('vacation_start', [$start, $end])
+                    ->orWhereBetween('vacation_end', [$start, $end])
+                    ->orWhere(function ($q) use ($start, $end) {
+                        $q->where('vacation_start', '<', $start)
+                            ->where('vacation_end', '>', $end);
+                    });
+            })
+            ->orderBy('vacation_start', 'asc')
+            ->get();
+
+        // 3. Calculate "Vacation Taken"
+        $vacationDaysTaken = 0;
+        $deductibleTypes = ['vacation', 'vacation leave', 'paid time off'];
+
+        foreach ($allVacations as $vacation) {
+            $vStart = Carbon::parse($vacation->vacation_start);
+            $vEnd   = Carbon::parse($vacation->vacation_end);
+
+            // Clamp dates to the report window
+            $effectiveStart = $vStart->max($start);
+            $effectiveEnd   = $vEnd->min($end);
+
+            if ($effectiveEnd->gte($effectiveStart)) {
+                if (in_array(strtolower($vacation->type), $deductibleTypes)) {
+                    $days = $effectiveStart->diffInDays($effectiveEnd) + 1;
+                    $vacationDaysTaken += $days;
+                }
+            }
+        }
+
+        // 4. Calculate Net Balance
+        $netBalance = $accruedDays - $vacationDaysTaken;
+
+        $results = [
+            'user'           => $user,
+            'start'          => $start,
+            'end'            => $end,
+            'accrued_days'   => $accruedDays,
+            'taken_days'     => $vacationDaysTaken,
+            'net_balance'    => $netBalance,
+            'vacations'      => $allVacations
+        ];
+
+        // CHECK IF PDF GENERATION IS REQUESTED
+        $pdfDownloadContent = null;
+        if ($request->has('generate_pdf') && $request->input('generate_pdf') == '1') {
+            $pdf = Pdf::loadView('vacation.leave_balance_pdf', ['results' => $results]);
+
+            // Optional: Set paper size
+            $pdf->setPaper('a4', 'portrait');
+
+            // Get content instead of downloading immediately
+            $pdfDownloadContent = base64_encode($pdf->output());
+        }
+
+        return view('vacation.leave_balance', [
+            'results' => $results,
+            'pdf_download_content' => $pdfDownloadContent
+        ]);
+    }
+    public function reject(Request $request, Vacation $vacation)
+    {
+        // Check permission to approve (using same permission for rejection)
+        if (! auth()->user()->can('approve vacation requests')) {
+            abort(403);
+        }
+
+        // Only allow rejecting pending requests
+        if ($vacation->status !== 'pending') {
+            return redirect()->back()->with('error', 'Only pending requests can be rejected.');
+        }
+
+        $vacation->update(['status' => 'rejected']);
+
+        return redirect()->route('vacation.approvals')->with('success', 'Vacation request rejected.');
+    }
+
 }

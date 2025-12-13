@@ -4,8 +4,6 @@
             <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">{{ __('Approvals') }}</h1>
             <p class="text-gray-600 dark:text-gray-400 mt-1">{{ __('Pending and approved vacation requests') }}</p>
         </div>
-
-
     </div>
 
     @if (session('success'))
@@ -30,7 +28,7 @@
                 <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
                     <thead class="bg-gray-50 dark:bg-gray-700">
                     <tr>
-                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">{{ __('Number') }}</th>
+                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">{{ __('User') }}</th>
                         <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">{{ __('Submission Date') }}</th>
                         <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">{{ __('Start') }}</th>
                         <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">{{ __('End') }}</th>
@@ -43,7 +41,7 @@
                     <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
                     @forelse ($pending as $p)
                         <tr class="hover:bg-gray-50 dark:hover:bg-gray-700">
-                            <td class="px-4 py-3 text-sm text-gray-900 dark:text-gray-100">{{ $p->id }}</td>
+                            <td class="px-4 py-3 text-sm text-gray-900 dark:text-gray-100">{{ $p->belongsToUser()->first()->name }}</td>
                             <td class="px-4 py-3 text-sm text-gray-500 dark:text-gray-400">{{ $p->submission_date ? $p->submission_date->format('Y-m-d H:i') : '-' }}</td>
                             <td class="px-4 py-3 text-sm text-gray-500 dark:text-gray-400">{{ $p->vacation_start ? $p->vacation_start->format('Y-m-d') : '-' }}</td>
                             <td class="px-4 py-3 text-sm text-gray-500 dark:text-gray-400">{{ $p->vacation_end ? $p->vacation_end->format('Y-m-d') : '-' }}</td>
@@ -51,12 +49,21 @@
                             <td class="px-4 py-3 text-sm text-gray-500 dark:text-gray-400">{{ \Illuminate\Support\Str::limit($p->comments, 80) }}</td>
                             <td class="px-4 py-3 text-right text-sm">
                                 @can('approve vacation requests')
-                                    <form action="{{ route('vacation.approve', $p) }}" method="POST" onsubmit="return confirm('{{ __('Approve this request?') }}')">
-                                        @csrf
-                                        <button type="submit" class="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded text-sm">
-                                            {{ __('Approve') }}
-                                        </button>
-                                    </form>
+                                    <div class="flex justify-end space-x-2">
+                                        <form action="{{ route('vacation.approve', $p) }}" method="POST" onsubmit="return confirm('{{ __('Approve this request?') }}')">
+                                            @csrf
+                                            <button type="submit" class="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded text-sm">
+                                                {{ __('Approve') }}
+                                            </button>
+                                        </form>
+
+                                        <form action="{{ route('vacation.reject', $p) }}" method="POST" onsubmit="return confirm('{{ __('Reject this request?') }}')">
+                                            @csrf
+                                            <button type="submit" class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded text-sm">
+                                                {{ __('Reject') }}
+                                            </button>
+                                        </form>
+                                    </div>
                                 @else
                                     <span class="text-xs text-gray-400">{{ __('No actions') }}</span>
                                 @endcan
@@ -88,7 +95,7 @@
                 <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
                     <thead class="bg-gray-50 dark:bg-gray-700">
                     <tr>
-                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">{{ __('Number') }}</th>
+                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">{{ __('User') }}</th>
                         <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">{{ __('Submission Date') }}</th>
                         <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">{{ __('Start') }}</th>
                         <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">{{ __('End') }}</th>
@@ -100,7 +107,7 @@
                     <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
                     @forelse ($approved as $a)
                         <tr class="hover:bg-gray-50 dark:hover:bg-gray-700">
-                            <td class="px-4 py-3 text-sm text-gray-900 dark:text-gray-100">{{ $a->id }}</td>
+                            <td class="px-4 py-3 text-sm text-gray-900 dark:text-gray-100">{{ $a->belongsToUser()->first()->name }}</td>
                             <td class="px-4 py-3 text-sm text-gray-500 dark:text-gray-400">{{ $a->submission_date ? $a->submission_date->format('Y-m-d H:i') : '-' }}</td>
                             <td class="px-4 py-3 text-sm text-gray-500 dark:text-gray-400">{{ $a->vacation_start ? $a->vacation_start->format('Y-m-d') : '-' }}</td>
                             <td class="px-4 py-3 text-sm text-gray-500 dark:text-gray-400">{{ $a->vacation_end ? $a->vacation_end->format('Y-m-d') : '-' }}</td>
