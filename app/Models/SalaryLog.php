@@ -4,39 +4,54 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class SalaryLog extends Model
 {
     use HasFactory;
 
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var list<string>
+     */
     protected $fillable = [
         'user_id',
         'period_from',
         'period_until',
+        'gross_salary',
+        'net_salary',
     ];
 
-    protected $casts = [
-        'period_from' => 'date',
-        'period_until' => 'date',
-    ];
+    /**
+     * Get the attributes that should be cast.
+     *
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'period_from' => 'date',
+            'period_until' => 'date',
+            'gross_salary' => 'decimal:2',
+            'net_salary' => 'decimal:2',
+        ];
+    }
 
-    public function user()
+    /**
+     * Get the user that owns the salary log.
+     */
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
-    public function salaryComponents()
+    /**
+     * Get the components for the salary log.
+     */
+    public function salaryComponents(): HasMany
     {
-        return $this->belongsToMany(SalaryComponent::class, 'salary_log_component')->withPivot('amount');
-    }
-
-    public function getGrossSalaryAttribute()
-    {
-        return $this->salaryComponents()->where('amount', '>', 0)->sum('amount');
-    }
-
-    public function getNetSalaryAttribute()
-    {
-        return $this->salaryComponents()->sum('amount');
+        return $this->hasMany(SalaryComponent::class);
     }
 }

@@ -13,12 +13,9 @@ return new class extends Migration
     {
         Schema::create('salary_components', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('salary_log_id')->constrained('salary_logs')->onDelete('cascade');
             $table->string('name');
-            $table->enum('type', ['earning', 'deduction']);
-            $table->boolean('is_percentage')->default(false);
-            $table->decimal('value', 8, 2);
-            $table->boolean('applies_to_all')->default(false);
-            $table->timestamps();
+            $table->decimal('sum', 10, 2);
         });
     }
 
@@ -27,6 +24,9 @@ return new class extends Migration
      */
     public function down(): void
     {
+        Schema::table('salary_components', function (Blueprint $table) {
+            $table->dropForeign(['salary_log_id']);
+        });
         Schema::dropIfExists('salary_components');
     }
 };

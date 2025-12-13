@@ -91,7 +91,7 @@
     <script>
         function salaryForm() {
             return {
-                components: @json($salaryComponents),
+                components: @json($salaryComponents).map(c => ({ id: c.id, name: c.name, amount: c.sum })),
                 grossSalary: 0,
                 netSalary: 0,
 

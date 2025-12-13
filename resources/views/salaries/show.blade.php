@@ -52,10 +52,9 @@
                         <div class="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
                             <div>
                                 <p class="font-medium text-gray-900 dark:text-gray-100">{{ $component->name }}</p>
-                                <p class="text-sm text-gray-500 dark:text-gray-400">{{ ucfirst($component->type) }}</p>
                             </div>
                             <div class="text-sm font-medium text-gray-900 dark:text-gray-100">
-                                ${{ number_format($component->pivot->amount, 2) }}
+                                ${{ number_format($component->sum, 2) }}
                             </div>
                         </div>
                     @endforeach
