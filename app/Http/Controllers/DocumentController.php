@@ -20,8 +20,8 @@ class DocumentController extends Controller
      */
     public function index(): View
     {
-        $documents = Document::latest()
-        ->paginate(10);
+        $documents = Document::latest('name')
+            ->paginate(10);
         return view('documents.index', compact('documents'));
     }
 
@@ -39,44 +39,41 @@ class DocumentController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $request->validate([
-        'name' => 'required|string|max:255',
-        'comment' => 'required|string',
-        'file' => 'required|file|mimes:pdf,docx|max:10240',
-        'convert' => 'nullable|boolean',
+            'name' => 'required|string|max:255',
+            'comment' => 'required|string',
+            'file' => 'required|file|mimes:pdf,docx|max:10240',
+            'convert' => 'nullable|boolean',
         ]);
 
-         if ($request->hasFile('file')) {
-            
+        if ($request->hasFile('file')) {
+
             $file = $request->file('file');
             $filename = time() . '_' . $file->getClientOriginalName();
-            $extension = $file->getClientOriginalExtension(); 
+            $extension = $file->getClientOriginalExtension();
 
-            if ($extension === 'docx' && $request-> convert == 1) 
-            {
-                $filePath = $this -> convertToPDF($file,$filename);
+            if ($extension === 'docx' && $request->convert == 1) {
+                $filePath = $this->convertToPDF($file, $filename);
                 $extension = 'pdf';
-            }
-            else
-            {
+            } else {
                 $filePath = $file->storeAs('documents', $filename, 'public');
             }
 
         } else {
             return back()->withErrors(['file' => 'File upload failed'])->withInput();
         }
-                
+
         $document = Document::create([
-        'name' => $request['name'],
-        'type' => $extension,
-        'user_id' => Auth::id(),
+            'name' => $request['name'],
+            'type' => $extension,
+            'user_id' => Auth::id(),
         ]);
-        
+
         DocumentVersion::create([
             'version_number' => 1,
             'change_date' => now(),
             'file_url' => $filePath,
             'comment' => $request['comment'] ?? null,
-            'document_id' => $document-> id,
+            'document_id' => $document->id,
         ]);
 
         return redirect()
@@ -102,46 +99,43 @@ class DocumentController extends Controller
     public function update(Request $request, Document $document): RedirectResponse
     {
         $request->validate([
-        'name' => 'required|string|max:255',
-        'comment' => 'required|string',
-        'file' => 'nullable|file|mimes:pdf,docx|max:10240',
-        'convert' => 'nullable|boolean',
+            'name' => 'required|string|max:255',
+            'comment' => 'required|string',
+            'file' => 'nullable|file|mimes:pdf,docx|max:10240',
+            'convert' => 'nullable|boolean',
         ]);
 
 
-        $extension = $document -> type;
+        $extension = $document->type;
 
-        if ($request->hasFile('file')) 
-        {
+        if ($request->hasFile('file')) {
             $file = $request->file('file');
             $filename = time() . '_' . $file->getClientOriginalName();
-            $extension = $file->getClientOriginalExtension(); 
+            $extension = $file->getClientOriginalExtension();
 
-            if ($extension === 'docx' && $request-> convert == 1) 
-            {
-                $filePath = $this -> convertToPDF($file,$filename);
+            if ($extension === 'docx' && $request->convert == 1) {
+                $filePath = $this->convertToPDF($file, $filename);
                 $extension = 'pdf';
-            }
-            else
-            {
+            } else {
                 $filePath = $file->storeAs('documents', $filename, 'public');
             }
-            
+
             DocumentVersion::create([
                 'document_id' => $document->id,
                 'version_number' => $document->versions()->max('version_number') + 1,
                 'change_date' => now(),
                 'file_url' => $filePath,
                 'comment' => $request->input('comment') ?? ' ',
-                ]);
+            ]);
         }
-        
+
         $document->versions()->latest('version_number')->first()->update([
-            'comment' => $request->input('comment')]);
-        
+            'comment' => $request->input('comment')
+        ]);
+
         $document->update([
-        'name' => $request->input('name'),
-        'type' => $extension
+            'name' => $request->input('name'),
+            'type' => $extension
         ]);
 
         return redirect()
@@ -156,15 +150,14 @@ class DocumentController extends Controller
     {
         foreach ($document->versions as $version) {
 
-            if (Storage::disk('public')->exists($version->file_url)) 
-            {
+            if (Storage::disk('public')->exists($version->file_url)) {
                 Storage::disk('public')->delete($version->file_url);
             }
         }
 
         $document->versions()->delete();
         $document->delete();
-        
+
         return redirect()
             ->route('documents.index')
             ->with('success', 'Document deleted successfully!');
@@ -175,12 +168,12 @@ class DocumentController extends Controller
         $latestVersion = $document->versions()->latest('version_number')->first();
 
         if (!$latestVersion) {
-        abort(404, 'File not found.');
+            abort(404, 'File not found.');
         }
 
         return Storage::disk('public')->download($latestVersion->file_url, $document->name . '.' . $document->type);
     }
-    public function convertToPDF($file, $filename) 
+    public function convertToPDF($file, $filename)
     {
         $phpWord = IOFactory::load($file->getPathname());
         ob_start();
@@ -193,7 +186,7 @@ class DocumentController extends Controller
         $pdfFilename = pathinfo($filename, PATHINFO_FILENAME) . '.pdf';
         $filePath = 'documents/' . $pdfFilename;
         $pdf->save(storage_path('app/public/' . $filePath));
-        
+
         return $filePath;
     }
 }
