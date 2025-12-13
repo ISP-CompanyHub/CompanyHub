@@ -81,6 +81,7 @@ class EmployeeController extends Controller
             'email' => 'required|email|max:255|unique:users,email,' . $employee->id,
             'phone_number' => 'nullable|string|max:20',
             'address' => 'nullable|string|max:255',
+            'status' => 'required|in:active,inactive',
         ]);
 
         $employee->update($validated);
