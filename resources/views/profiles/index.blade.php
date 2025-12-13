@@ -96,7 +96,7 @@
                             <p class="text-gray-900 dark:text-gray-100">{{ $employee->email }}</p>
                         </td>
                         <td class="px-6 py-4">
-                            <p class="text-gray-900 dark:text-gray-100">{{ $employee->department()->first()->name }}</p>
+                            <p class="text-gray-900 dark:text-gray-100">{{ $employee->department->name }}</p>
                         </td>
                         <td class="px-6 py-4">
                             <span
