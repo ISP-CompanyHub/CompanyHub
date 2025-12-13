@@ -141,5 +141,27 @@ class VacationSeeder extends Seeder
                 'comments' => 'Holidays.'
             ]
         );
+        Vacation::firstOrCreate(
+            [
+                'user_id' => User::where('name', 'Employee')->first()->id,
+                'submission_date' => '2025-03-05',
+                'vacation_start' => '2025-03-06',
+                'vacation_end' => '2025-03-09',
+                'type' => 'remote',
+                'status' => 'pending',
+                'comments' => 'remote'
+            ]
+        );
+        Vacation::firstOrCreate(
+            [
+                'user_id' => User::where('name', 'Employee')->first()->id,
+                'submission_date' => '2025-07-12',
+                'vacation_start' => '2025-07-13',
+                'vacation_end' => '2025-07-13',
+                'type' => 'emergency',
+                'status' => 'approved',
+                'comments' => 'doctors appointment'
+            ]
+        );
     }
 }
