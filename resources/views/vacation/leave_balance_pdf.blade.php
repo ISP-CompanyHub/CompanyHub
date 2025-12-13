@@ -38,6 +38,11 @@
         .bg-paid { background: #f0fff4; color: #276749; }
         .bg-sick { background: #fff5f5; color: #c53030; }
         .bg-default { background: #edf2f7; color: #4a5568; }
+
+        /* Helper for nested table alignment */
+        .date-table { width: auto; float: right; }
+        .date-table td { padding: 2px 0; text-align: left; }
+        .date-table .label-cell { width: 60px; font-weight: bold; color: #4a5568; }
     </style>
 </head>
 <body>
@@ -50,12 +55,28 @@
     <table>
         <tr>
             <td width="60%">
-                <div class="meta-label">Employee:</div> {{ $results['user']->name }}<br>
-                <div class="meta-label">Email:</div> {{ $results['user']->email }}
+                <table>
+                    <tr>
+                        <td class="meta-label">Employee:</td>
+                        <td>{{ $results['user']->name }}</td>
+                    </tr>
+                    <tr>
+                        <td class="meta-label">Email:</td>
+                        <td>{{ $results['user']->email }}</td>
+                    </tr>
+                </table>
             </td>
-            <td width="40%" style="text-align: right;">
-                <div class="meta-label" style="display:inline-block;">From:</div> {{ $results['start']->format('M j, Y') }}<br>
-                <div class="meta-label" style="display:inline-block;">To:</div> {{ $results['end']->format('M j, Y') }}
+            <td width="40%" style="vertical-align: top;">
+                <table class="date-table">
+                    <tr>
+                        <td class="label-cell">From:</td>
+                        <td>{{ $results['start']->format('M j, Y') }}</td>
+                    </tr>
+                    <tr>
+                        <td class="label-cell">To:</td>
+                        <td>{{ $results['end']->format('M j, Y') }}</td>
+                    </tr>
+                </table>
             </td>
         </tr>
     </table>

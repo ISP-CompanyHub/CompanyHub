@@ -59,24 +59,19 @@
         @if (isset($results))
             <div class="mt-8 border-t dark:border-gray-700 pt-6">
                 <h3 class="text-lg font-bold text-gray-800 dark:text-gray-100 mb-4">{{ __('Balance Report') }}</h3>
-                <p class="text-sm text-gray-500 mb-4">{{ __('Note: Only "Vacation" type leaves are deducted from the earned balance.') }}</p>
 
-                {{-- Summary Cards --}}
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
                     <div class="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg border border-blue-100 dark:border-blue-800">
                         <div class="text-sm text-blue-600 dark:text-blue-400 font-medium uppercase">{{ __('Earned (Accrued)') }}</div>
                         <div class="text-2xl font-bold text-gray-800 dark:text-gray-100">{{ $results['accrued_days'] }} <span class="text-sm font-normal text-gray-500">days</span></div>
-                        <div class="text-xs text-gray-500 mt-1">Based on {{ $results['start']->diffInMonths($results['end']) }} months work</div>
                     </div>
                     <div class="bg-orange-50 dark:bg-orange-900/20 p-4 rounded-lg border border-orange-100 dark:border-orange-800">
                         <div class="text-sm text-orange-600 dark:text-orange-400 font-medium uppercase">{{ __('Vacation Taken') }}</div>
                         <div class="text-2xl font-bold text-gray-800 dark:text-gray-100">{{ $results['taken_days'] }} <span class="text-sm font-normal text-gray-500">days</span></div>
-                        <div class="text-xs text-gray-500 mt-1">Deducted from balance</div>
                     </div>
                     <div class="bg-green-50 dark:bg-green-900/20 p-4 rounded-lg border border-green-100 dark:border-green-800">
                         <div class="text-sm text-green-600 dark:text-green-400 font-medium uppercase">{{ __('Net Balance') }}</div>
                         <div class="text-2xl font-bold text-gray-800 dark:text-gray-100">{{ $results['net_balance'] }} <span class="text-sm font-normal text-gray-500">days</span></div>
-                        <div class="text-xs text-gray-500 mt-1">Earned - Taken</div>
                     </div>
                 </div>
 
