@@ -20,7 +20,7 @@
 
     <div class="max-w-3xl">
         <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
-            <form action="{{ route('documents.update', $document -> id) }}" method="POST">
+            <form action="{{ route('documents.update', $document -> id) }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
 
@@ -40,24 +40,27 @@
 
                 <div>
                     <label for="comment" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                        {{ __('Comment') }}
+                        {{ __('Comment') }} <span class="text-red-500">*</span>
                     </label>
-                    <textarea name="comment" id="comment" rows="6"
-                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100">{{ old('comment', $document-> comment) }}</textarea>
+                    <textarea name="comment" id="comment" rows="6" required
+                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100"
+                        >{{ old('comment',$document->versions()->latest('version_number')->first()->comment ) }}</textarea>
+                    
+
                     @error('comment')
                         <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                     @enderror
                 </div>
 
 
-                <p>Current file: {{ $document -> filename }} </p>
+                <p>Current file: {{ $document -> name . "." . $document -> type }} </p>
 
                 <div>
                     <label for="file" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                        {{ __('File') }}  <span class="text-red-500">*</span>
+                        {{ __('File') }}
                     </label>
                     
-                    <input type="file" name="file" id="file" accept=".pdf,.doc,.docx,.txt" required
+                    <input type="file" name="file" id="file" accept=".pdf,.docx"
                         class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100 file:mr-4 file:py-2 file:px-4">
                     @error('file')
                         <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
@@ -67,7 +70,7 @@
                 <div>
                     <label class="flex items-center">
                         <input type="checkbox" name="convert" value="1" id="convert"
-                            {{ old('convert', true) ? 'checked' : '' }}
+                            {{ old('convert', false) ? 'checked' : '' }}
                             class="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600">
                         <span
                             class="ml-2 text-sm text-gray-700 dark:text-gray-300">{{ __('Convert to PDF') }}</span>

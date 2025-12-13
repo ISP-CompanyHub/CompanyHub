@@ -87,6 +87,11 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('documents', DocumentController::class);
 });
 
+Route::middleware(['auth'])->group(function () {
+    Route::get('/documents/{document}/download', [DocumentController::class, 'download'])
+    ->name('documents.download');
+});
+
 // Vacations
 Route::middleware(['auth'])->group(function () {
     Route::resource('holidays', HolidayController::class);
