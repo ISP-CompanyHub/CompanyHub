@@ -14,9 +14,10 @@ return new class extends Migration
         Schema::create('salary_logs', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users');
-            $table->decimal('gross_salary', 10, 2);
-            $table->decimal('net_salary', 10, 2);
-            $table->date('calculation_date');
+            $table->date('period_from')->nullable();
+            $table->date('period_until')->nullable();
+            $table->decimal('gross_salary', 10, 2)->default(0);
+            $table->decimal('net_salary', 10, 2)->default(0);
             $table->timestamps();
         });
     }

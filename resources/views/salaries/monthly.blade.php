@@ -4,6 +4,17 @@
         <p class="text-gray-600 dark:text-gray-400 mt-1">{{ __('Generate a monthly salary calculation for an employee.') }}</p>
     </div>
 
+    @if (session('success'))
+        <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4" role="alert">
+            {{ session('success') }}
+        </div>
+    @endif
+    @if (session('error'))
+        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4" role="alert">
+            {{ session('error') }}
+        </div>
+    @endif
+
     <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6 mb-6">
         <form action="{{ route('salaries.monthly') }}" method="GET">
             <div class="flex items-center gap-4">
@@ -46,6 +57,12 @@
                             <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">{{ __('Job Title') }}</dt>
                             <dd class="text-sm text-gray-900 dark:text-gray-100">{{ $reportData['selectedUser']->job_title }}</dd>
                         </div>
+                        <div class="flex justify-between py-2 border-b">
+                            <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">{{ __('Pay Period') }}</dt>
+                            <dd class="text-sm text-gray-900 dark:text-gray-100">
+                                {{ \Carbon\Carbon::parse(request('month'))->format('F Y') }}
+                            </dd>
+                        </div>
                     </dl>
                 </div>
                 <div>
@@ -63,20 +80,32 @@
                 </div>
             </div>
             <div class="mt-6">
-                <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">{{ __('Salary Components') }}</h3>
-                <ul class="divide-y divide-gray-200 dark:divide-gray-700">
-                    @foreach ($reportData['groupedComponents'] as $component)
-                        <li class="flex justify-between py-2">
-                            <span class="text-sm text-gray-900 dark:text-gray-100">{{ $component->name }}</span>
-                            <span class="text-sm font-medium @if($component->pivot->amount < 0) text-red-600 @else text-green-600 @endif">
-                                ${{ number_format($component->pivot->amount, 2) }}
-                            </span>
-                        </li>
-                    @endforeach
-                </ul>
+                <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">{{ __('Salary Components') }}</h3>
+                @foreach($reportData['salaryLogs'] as $log)
+                    <div class="mb-4 last:mb-0">
+                        <div class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2 bg-gray-50 dark:bg-gray-700 px-3 py-2 rounded">
+                            {{ __('Period') }}: {{ $log->period_from->format('d M') }} - {{ $log->period_until->format('d M') }}
+                        </div>
+                        <ul class="divide-y divide-gray-200 dark:divide-gray-700 pl-3">
+                            @foreach ($log->salaryComponents as $component)
+                                <li class="flex justify-between py-2">
+                                    <span class="text-sm text-gray-900 dark:text-gray-100">{{ $component->name }}</span>
+                                    <span class="text-sm font-medium @if($component->sum < 0) text-red-600 @else text-green-600 @endif">
+                                        ${{ number_format($component->sum, 2) }}
+                                    </span>
+                                </li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endforeach
             </div>
             <div class="mt-6 text-right">
-                <button class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg">{{ __('Send Email') }}</button>
+                <form action="{{ route('salaries.monthly.send') }}" method="POST" class="inline">
+                    @csrf
+                    <input type="hidden" name="user_id" value="{{ $reportData['selectedUser']->id }}">
+                    <input type="hidden" name="month" value="{{ request('month') }}">
+                    <button type="submit" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg">{{ __('Send Email') }}</button>
+                </form>
             </div>
         </div>
     @elseif(request()->has('user_id') && request('user_id'))

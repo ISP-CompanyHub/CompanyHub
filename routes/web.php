@@ -75,9 +75,10 @@ Route::middleware(['auth', 'verified', 'role:manager'])->group(function () {
         ->name('job-offers.download');
 });
 
-// Salary Management (Administrator | Manager)
-Route::middleware(['auth', 'verified', 'role:administrator|manager'])->group(function () {
+// Salary Management (Manager only)
+Route::middleware(['auth', 'verified', 'role:manager'])->group(function () {
     Route::get('salaries/monthly', [SalaryController::class, 'monthly'])->name('salaries.monthly');
+    Route::post('salaries/monthly/send', [SalaryController::class, 'sendEmail'])->name('salaries.monthly.send');
     Route::resource('salaries', SalaryController::class);
 });
 
