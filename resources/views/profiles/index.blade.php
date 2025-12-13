@@ -71,7 +71,7 @@
                     </th>
                     <th
                         class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                        {{ __('Departament') }}
+                        {{ __('Department') }}
                     </th>
                     <th
                         class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
@@ -96,7 +96,7 @@
                             <p class="text-gray-900 dark:text-gray-100">{{ $employee->email }}</p>
                         </td>
                         <td class="px-6 py-4">
-                            <p class="text-gray-900 dark:text-gray-100">{{ $employee->departament()->first()->name }}</p>
+                            <p class="text-gray-900 dark:text-gray-100">{{ $employee->department()->first()->name }}</p>
                         </td>
                         <td class="px-6 py-4">
                             <span
