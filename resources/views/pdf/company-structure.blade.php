@@ -1,129 +1,106 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <meta charset="utf-8">
-    <title>Company Structure</title>
+    <meta charset="UTF-8">
+    <title>{{ __('CompanyHub Structure') }}</title>
+
     <style>
         body {
             font-family: DejaVu Sans, sans-serif;
             font-size: 12px;
+            color: #333;
         }
 
-        .org-chart,
-        .org-chart ul {
-            list-style-type: none;
-            position: relative;
-        }
-
-        .org-chart {
-            padding-left: 10px;
-        }
-
-        .org-chart ul {
-            padding-left: 25px;
-            margin-left: 10px;
-        }
-
-        .org-chart li {
-            position: relative;
-            padding-top: 4px;
-            padding-bottom: 4px;
-        }
-
-        .node {
-            display: inline-block;
-            border: 1px solid #aaa;
-            padding: 6px 10px;
-            border-radius: 4px;
-            background-color: #f9f9f9;
-            min-width: 180px;
-            line-height: 1.4;
-        }
-
-        .node-department {
-            background-color: #eaeaea;
+        h1 {
+            font-size: 20px;
+            margin-bottom: 20px;
             font-weight: bold;
         }
 
+        .org-chart {
+            border: 1px solid #ccc;
+            padding: 15px;
+            border-radius: 6px;
+            background: #fff;
+        }
+
+        ul {
+            list-style: none;
+            padding-left: 10px;
+            margin-left: 0;
+        }
+
+        /* Department Node */
+        .node-department {
+            width: 200px; /* narrower width for departments */
+            background: #e8eefc;
+            font-weight: bold;
+        }
+
+        /* Employee Node */
         .node-employee {
+            width: 260px; /* employees "stick out" farther */
+            margin-left: 30px; /* extra indentation beyond departments */
+            background: #f3f3f3;
+        }
+
+        /* Shared node styling */
+        .node {
+            border: 1px solid #bbb;
+            border-radius: 4px;
+            padding: 8px 10px;
+            margin-bottom: 8px;
+        }
+
+        .subtext {
             font-size: 11px;
-        }
-
-        .node .lead {
-            font-style: italic;
-            font-weight: normal;
-            color: #333;
+            color: #555;
+            margin-top: 2px;
             display: block;
-            font-size: 11px;
-        }
-
-        .node .job-title {
-            color: #333;
-            display: block;
-        }
-
-        .org-chart li::before,
-        .org-chart li::after {
-            content: '';
-            position: absolute;
-            left: -15px;
-        }
-
-        .org-chart li::before {
-            border-top: 1px solid #999;
-            top: 18px;
-            width: 15px;
-            height: 0;
-        }
-
-        .org-chart li::after {
-            border-left: 1px solid #999;
-            top: 0;
-            width: 0;
-            height: 100%;
-        }
-
-        .org-chart li:first-child::after {
-            top: 18px;
-            height: 100%;
-        }
-
-        .org-chart li:last-child::after {
-            height: 18px;
-        }
-
-        .org-chart li:only-child::after {
-            display: none;
         }
     </style>
 </head>
+
 <body>
-<h1>CompanyHub structure</h1>
+<h1>{{ __('CompanyHub Structure') }}</h1>
 
-<ul class="org-chart">
-    @foreach($departments as $department)
-        <li>
-            <div class="node node-department">
-                {{ $department->name }}
-                @if($department->lead)
-                    <span class="lead">({{ $department->lead->name }})</span>
-                @endif
-            </div>
+<div class="org-chart">
 
-            @if($department->employees->isNotEmpty())
-                <ul>
-                    @foreach($department->employees as $employee)
-                        <li>
-                            <div class="node node-employee">
-                                {{ $employee->name }} {{ $employee->surname }}
-                                <small class="job-title">{{ $employee->job_title ?? '—' }}</small>
-                            </div>
-                        </li>
-                    @endforeach
-                </ul>
-            @endif
-        </li>
-    @endforeach
-</ul>
+    @if($departments->isEmpty())
+        <p>{{ __('No departments found.') }}</p>
+    @else
+        <ul>
+            @foreach($departments as $department)
+                <li>
+                    <div class="node node-department">
+                        {{ $department->name }}
+                        @if($department->lead)
+                            <span class="subtext">
+                                    {{ __('Lead') }}: {{ strtoupper($department->lead->name[0]) }}. {{ ucfirst($department->lead->surname) }}
+                                </span>
+                        @endif
+                    </div>
+
+                    @if($department->employees->isNotEmpty())
+                        <ul>
+                            @foreach($department->employees as $employee)
+                                <li>
+                                    <div class="node node-employee">
+                                        {{ $employee->name }} {{ $employee->surname }}
+                                        <span class="subtext">
+                                                {{ $employee->job_title ?? '—' }}
+                                            </span>
+                                    </div>
+                                </li>
+                            @endforeach
+                        </ul>
+                    @endif
+
+                </li>
+            @endforeach
+        </ul>
+    @endif
+
+</div>
 </body>
 </html>

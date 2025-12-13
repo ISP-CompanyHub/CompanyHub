@@ -50,7 +50,7 @@
                 <div>
                     <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">{{ __('Department') }}</dt>
                     <dd class="mt-1 text-sm text-gray-900 dark:text-gray-100">
-                        {{ $employee->department->name }}
+                        {{ $employee->departament->name }}
                     </dd>
                 </div>
 
