@@ -50,22 +50,6 @@
                                 <x-button type="primary">{{ __('Save') }}</x-button>
                             </div>
                         </form>
-
-                        <!-- Delete Account Section -->
-                        <div class="border-t border-gray-200 dark:border-gray-700 pt-6 mt-6">
-                            <h2 class="text-lg font-medium text-gray-800 dark:text-gray-200 mb-1">
-                                {{ __('Delete account') }}
-                            </h2>
-                            <p class="text-gray-600 dark:text-gray-400 mb-4">
-                                {{ __('Delete your account and all of its resources') }}
-                            </p>
-                            <form action="{{ route('settings.profile.destroy') }}" method="POST"
-                                onsubmit="return confirm('{{ __('Are you sure you want to delete your account?') }}')">
-                                @csrf
-                                @method('DELETE')
-                                <x-button type="danger">{{ __('Delete account') }}</x-button>
-                            </form>
-                        </div>
                     </div>
                 </div>
             </div>
