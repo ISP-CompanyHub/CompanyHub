@@ -11,6 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
+        Schema::dropIfExists('salary_components');
+
         Schema::create('salary_components', function (Blueprint $table) {
             $table->id();
             $table->foreignId('salary_log_id')->constrained('salary_logs')->onDelete('cascade');
