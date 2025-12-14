@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\InterviewScheduledMail;
+use App\Mail\UpdatedEmployeeInformationMain;
 use App\Models\Department;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\View\View;
 
 class EmployeeController extends Controller
@@ -82,9 +85,17 @@ class EmployeeController extends Controller
             'phone_number' => 'nullable|string|max:20',
             'address' => 'nullable|string|max:255',
             'status' => 'required|in:active,inactive',
+            'send_email' => 'sometimes|boolean',
         ]);
 
         $employee->update($validated);
+
+        if ($validated['send_email'])
+        {
+            Mail::to($employee->email)->send(
+                new UpdatedEmployeeInformationMain($employee)
+            );
+        }
 
         return redirect()->route('profiles.show', $employee)
             ->with('success', __('Employee profile updated successfully.'));
