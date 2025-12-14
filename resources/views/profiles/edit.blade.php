@@ -95,6 +95,13 @@
                 </div>
 
                 <div>
+                    <label for="send_email" class="block text-sm font-medium text-gray-500 dark:text-gray-400">{{ __('Send email notification') }}</label>
+                    <input type="checkbox" id="send_email" name="send_email"
+                           class="mt-2 h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                        {{ old('send_email') ? 'checked' : '' }} value="{{old('send_email', '1') ? '1' : '0' }}">
+                </div>
+
+                <div>
                     <label for="status"
                            class="block text-sm font-medium text-gray-500 dark:text-gray-400">{{ __('User Status') }}</label>
                     <select id="status" name="status"
