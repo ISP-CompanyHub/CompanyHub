@@ -88,7 +88,8 @@ task('deploy', [
     'artisan:optimize',
 
     // Migration
-    'artisan:migrate',
+    'artisan:migrate:fresh',
+    'artisan:db:seed',
 
     // Finalize deployment
     'deploy:publish',
