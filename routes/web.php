@@ -139,8 +139,7 @@ Route::middleware(['auth'])->group(function () {
 
 // Departments Management (Administrator | Manager)
 Route::middleware(['auth', 'verified', 'role:administrator|manager'])->prefix('departments')->name('departments.')->group(function () {
-    Route::get('/', [DepartmentController::class, 'index'])->name('index');
-    Route::get('{department}/edit', [DepartmentController::class, 'edit'])->name('edit');
+    Route::get('/', [DepartmentController::class, 'edit'])->name('edit');
     Route::put('{department}', [DepartmentController::class, 'update'])->name('update');
 });
 

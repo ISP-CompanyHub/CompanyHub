@@ -4,12 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Models\Department;
 use App\Models\User;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class DepartmentController extends Controller
 {
-    public function index(Request $request): View
+    public function edit(Request $request): View
     {
         $query = Department::with('lead');
 
@@ -19,18 +20,12 @@ class DepartmentController extends Controller
         }
 
         $departments = $query->paginate(10);
-
-        return view('departments.index', compact('departments'));
-    }
-
-    public function edit(Department $department)
-    {
         $users = User::all();
 
-        return view('departments.edit', compact('department', 'users'));
+        return view('departments.edit', compact('departments', 'users'));
     }
 
-    public function update(Request $request, Department $department)
+    public function update(Request $request, Department $department): RedirectResponse
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
@@ -40,7 +35,7 @@ class DepartmentController extends Controller
 
         $department->update($validated);
 
-        return redirect()->route('departments.index')
+        return redirect()->route('departments.edit')
             ->with('success', __('Department updated successfully.'));
     }
 }
