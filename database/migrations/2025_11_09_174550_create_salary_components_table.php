@@ -11,7 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
+        Schema::disableForeignKeyConstraints();
         Schema::dropIfExists('salary_components');
+        Schema::enableForeignKeyConstraints();
 
         Schema::create('salary_components', function (Blueprint $table) {
             $table->id();
