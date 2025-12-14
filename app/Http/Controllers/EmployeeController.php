@@ -90,7 +90,7 @@ class EmployeeController extends Controller
 
         $employee->update($validated);
 
-        if ($validated['send_email'])
+        if ($validated['send_email'] ?? false)
         {
             Mail::to($employee->email)->send(
                 new UpdatedEmployeeInformationMain($employee)
