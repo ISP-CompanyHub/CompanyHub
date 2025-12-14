@@ -19,7 +19,8 @@ class JobPostingController extends Controller
 {
     public function __construct(
         protected JobOfferPdfService $pdfService
-    ) {}
+    ) {
+    }
 
     /**
      * Display a listing of the resource.
@@ -44,7 +45,7 @@ class JobPostingController extends Controller
         ]);
 
         return redirect()
-            ->route('job-postings.index', $jobPosting)
+            ->route('job-postings.index')
             ->with('success', 'Job posting created successfully!');
     }
 
@@ -148,7 +149,7 @@ class JobPostingController extends Controller
         // Generate unique offer number
         $year = now()->year;
         $count = JobOffer::whereYear('created_at', $year)->count() + 1;
-        $offerNumber = "JO-{$year}-".str_pad($count, 3, '0', STR_PAD_LEFT);
+        $offerNumber = "JO-{$year}-" . str_pad($count, 3, '0', STR_PAD_LEFT);
 
         $jobOffer = JobOffer::create([
             ...$request->validated(),
@@ -177,7 +178,7 @@ class JobPostingController extends Controller
 
         return redirect()
             ->route('job-offers.show', $jobOffer)
-            ->with('success', 'Job offer created and sent successfully to '.$candidate->email.'!');
+            ->with('success', 'Job offer created and sent successfully to ' . $candidate->email . '!');
     }
 
     /**

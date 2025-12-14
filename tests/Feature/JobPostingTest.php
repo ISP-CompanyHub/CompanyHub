@@ -66,7 +66,7 @@ test('administrators can create job posting', function () {
     $response = $this->post(route('job-postings.store'), $data);
 
     $jobPosting = JobPosting::where('title', 'Software Developer')->first();
-    $response->assertRedirect(route('job-postings.show', $jobPosting));
+    $response->assertRedirect(route('job-postings.index'));
 
     $this->assertDatabaseHas('job_postings', [
         'title' => 'Software Developer',
