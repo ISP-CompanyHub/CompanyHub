@@ -8,7 +8,6 @@ use Illuminate\Database\Seeder;
 
 class VacationSeeder extends Seeder
 {
-
     public function run(): void
     {
         Vacation::firstOrCreate(
@@ -19,7 +18,7 @@ class VacationSeeder extends Seeder
                 'vacation_end' => '2025-02-02',
                 'type' => 'paid',
                 'status' => 'approved',
-                'comments' => 'Family trip to the mountains.'
+                'comments' => 'Family trip to the mountains.',
             ]
         );
 
@@ -31,7 +30,7 @@ class VacationSeeder extends Seeder
                 'vacation_end' => '2025-04-15',
                 'type' => 'unpaid',
                 'status' => 'pending',
-                'comments' => 'Taking a few days for personal matters.'
+                'comments' => 'Taking a few days for personal matters.',
             ]
         );
 
@@ -43,7 +42,7 @@ class VacationSeeder extends Seeder
                 'vacation_end' => '2025-06-17',
                 'type' => 'sick',
                 'status' => 'approved',
-                'comments' => 'Scheduled surgery recovery.'
+                'comments' => 'Scheduled surgery recovery.',
             ]
         );
 
@@ -55,7 +54,7 @@ class VacationSeeder extends Seeder
                 'vacation_end' => '2025-08-02',
                 'type' => 'paid',
                 'status' => 'rejected',
-                'comments' => 'Summer beach vacation.'
+                'comments' => 'Summer beach vacation.',
             ]
         );
 
@@ -67,7 +66,7 @@ class VacationSeeder extends Seeder
                 'vacation_end' => '2025-10-10',
                 'type' => 'remote',
                 'status' => 'approved',
-                'comments' => 'Working from home base for a week.'
+                'comments' => 'Working from home base for a week.',
             ]
         );
 
@@ -79,7 +78,7 @@ class VacationSeeder extends Seeder
                 'vacation_end' => '2025-12-21',
                 'type' => 'paid',
                 'status' => 'approved',
-                'comments' => 'Christmas holidays.'
+                'comments' => 'Christmas holidays.',
             ]
         );
 
@@ -91,7 +90,7 @@ class VacationSeeder extends Seeder
                 'vacation_end' => '2024-01-15',
                 'type' => 'emergency',
                 'status' => 'approved',
-                'comments' => 'Urgent family requirement.'
+                'comments' => 'Urgent family requirement.',
             ]
         );
         Vacation::firstOrCreate(
@@ -102,7 +101,7 @@ class VacationSeeder extends Seeder
                 'vacation_end' => '2025-01-22',
                 'type' => 'vacation',
                 'status' => 'approved',
-                'comments' => 'Winter break.'
+                'comments' => 'Winter break.',
             ]
         );
 
@@ -114,7 +113,7 @@ class VacationSeeder extends Seeder
                 'vacation_end' => '2025-04-15',
                 'type' => 'vacation',
                 'status' => 'approved',
-                'comments' => 'Personal day off.'
+                'comments' => 'Personal day off.',
             ]
         );
 
@@ -126,7 +125,7 @@ class VacationSeeder extends Seeder
                 'vacation_end' => '2025-08-14',
                 'type' => 'vacation',
                 'status' => 'approved',
-                'comments' => 'Summer vacation.'
+                'comments' => 'Summer vacation.',
             ]
         );
 
@@ -138,7 +137,7 @@ class VacationSeeder extends Seeder
                 'vacation_end' => '2025-12-30',
                 'type' => 'vacation',
                 'status' => 'approved',
-                'comments' => 'Holidays.'
+                'comments' => 'Holidays.',
             ]
         );
         Vacation::firstOrCreate(
@@ -149,7 +148,7 @@ class VacationSeeder extends Seeder
                 'vacation_end' => '2025-03-09',
                 'type' => 'remote',
                 'status' => 'pending',
-                'comments' => 'remote'
+                'comments' => 'remote',
             ]
         );
         Vacation::firstOrCreate(
@@ -160,7 +159,7 @@ class VacationSeeder extends Seeder
                 'vacation_end' => '2025-07-13',
                 'type' => 'emergency',
                 'status' => 'approved',
-                'comments' => 'doctors appointment'
+                'comments' => 'doctors appointment',
             ]
         );
     }

@@ -191,7 +191,7 @@ class CandidateController extends Controller
 
         return redirect()
             ->route('interviews.show', $interview)
-            ->with('success', 'Interview scheduled successfully! Email notification sent to ' . $interview->candidate->email);
+            ->with('success', 'Interview scheduled successfully! Email notification sent to '.$interview->candidate->email);
     }
 
     /**
@@ -236,7 +236,7 @@ class CandidateController extends Controller
 
             return redirect()
                 ->route('interviews.show', $interview)
-                ->with('success', 'Interview updated successfully! Email notification sent to ' . $interview->candidate->email);
+                ->with('success', 'Interview updated successfully! Email notification sent to '.$interview->candidate->email);
         }
 
         return redirect()

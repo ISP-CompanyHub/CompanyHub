@@ -18,7 +18,6 @@ class DatabaseSeeder extends Seeder
         $this->call(RolePermissionSeeder::class);
         $this->call(DepartmentSeeder::class);
 
-
         // Create test users with different roles
         $admin = User::firstOrCreate(
             ['email' => 'admin@companyhub.com'],

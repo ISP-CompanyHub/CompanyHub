@@ -2,25 +2,23 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Holiday;
 use App\Models\Vacation;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
 use Illuminate\View\View;
-use Barryvdh\DomPDF\Facade\Pdf;
-
 
 class VacationController extends Controller
 {
-
     public function index(Request $request)
     {
         $vacationRequests = Vacation::all()->where('user_id', $request->user()->id);
+
         return view('vacation.index', compact('vacationRequests'));
     }
+
     public function create(): View
     {
         return view('vacation.create');
@@ -47,7 +45,6 @@ class VacationController extends Controller
         return redirect()->route('vacation.index')
             ->with('success', 'Vacation request created successfully.');
     }
-
 
     public function show(Vacation $vacationRequest)
     {
@@ -122,6 +119,7 @@ class VacationController extends Controller
 
         return redirect()->route('vacation.approvals')->with('success', 'Vacation request approved.');
     }
+
     public function leaveBalanceForm(Request $request)
     {
         return view('vacation.leave_balance');
@@ -131,16 +129,16 @@ class VacationController extends Controller
     {
         $request->validate([
             'vacation_start' => 'required|date',
-            'vacation_end'   => 'required|date|after_or_equal:vacation_start',
+            'vacation_end' => 'required|date|after_or_equal:vacation_start',
         ]);
 
         $start = Carbon::parse($request->vacation_start);
-        $end   = Carbon::parse($request->vacation_end);
-        $user  = Auth::user();
+        $end = Carbon::parse($request->vacation_end);
+        $user = Auth::user();
 
         // 1. Calculate Earned Days (Accrual)
         $monthsWorked = $start->floatDiffInRealMonths($end);
-        $accruedDays  = round($monthsWorked * 1.67, 2);
+        $accruedDays = round($monthsWorked * 1.67, 2);
 
         // 2. Fetch ALL vacation records for history
         $allVacations = Vacation::where('user_id', $user->id)
@@ -161,11 +159,11 @@ class VacationController extends Controller
 
         foreach ($allVacations as $vacation) {
             $vStart = Carbon::parse($vacation->vacation_start);
-            $vEnd   = Carbon::parse($vacation->vacation_end);
+            $vEnd = Carbon::parse($vacation->vacation_end);
 
             // Clamp dates to the report window
             $effectiveStart = $vStart->max($start);
-            $effectiveEnd   = $vEnd->min($end);
+            $effectiveEnd = $vEnd->min($end);
 
             if ($effectiveEnd->gte($effectiveStart)) {
                 if (in_array(strtolower($vacation->type), $deductibleTypes)) {
@@ -179,13 +177,13 @@ class VacationController extends Controller
         $netBalance = $accruedDays - $vacationDaysTaken;
 
         $results = [
-            'user'           => $user,
-            'start'          => $start,
-            'end'            => $end,
-            'accrued_days'   => $accruedDays,
-            'taken_days'     => $vacationDaysTaken,
-            'net_balance'    => $netBalance,
-            'vacations'      => $allVacations
+            'user' => $user,
+            'start' => $start,
+            'end' => $end,
+            'accrued_days' => $accruedDays,
+            'taken_days' => $vacationDaysTaken,
+            'net_balance' => $netBalance,
+            'vacations' => $allVacations,
         ];
 
         // CHECK IF PDF GENERATION IS REQUESTED
@@ -202,9 +200,10 @@ class VacationController extends Controller
 
         return view('vacation.leave_balance', [
             'results' => $results,
-            'pdf_download_content' => $pdfDownloadContent
+            'pdf_download_content' => $pdfDownloadContent,
         ]);
     }
+
     public function reject(Request $request, Vacation $vacation)
     {
         // Check permission to approve (using same permission for rejection)
@@ -221,5 +220,4 @@ class VacationController extends Controller
 
         return redirect()->route('vacation.approvals')->with('success', 'Vacation request rejected.');
     }
-
 }

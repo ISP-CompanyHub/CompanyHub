@@ -11,9 +11,8 @@ class SalarySlipPdfService
     /**
      * Generate PDF for salary slip.
      *
-     * @param User $user
-     * @param string $month YYYY-MM
-     * @param array $reportData Calculated data
+     * @param  string  $month  YYYY-MM
+     * @param  array  $reportData  Calculated data
      * @return string Path to stored PDF
      */
     public function generate(User $user, string $month, array $reportData): string

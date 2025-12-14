@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Vacation extends Model
 {
@@ -47,10 +46,9 @@ class Vacation extends Model
      * Optionally, you can provide some helper constants or scopes.
      * Uncomment or adapt these to your app's needs.
      */
-
     public function belongsToUser(): BelongsTo
     {
-        return $this->belongsTo(User::class,'user_id');
+        return $this->belongsTo(User::class, 'user_id');
     }
     // public const STATUS_PENDING  = 'pending';
     // public const STATUS_APPROVED = 'approved';

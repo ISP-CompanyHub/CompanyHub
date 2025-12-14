@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class DocumentVersion extends Model
 {
     use HasFactory;
-    
+
     protected $fillable = [
         'version_number',
         'change_date',

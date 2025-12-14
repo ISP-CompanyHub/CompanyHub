@@ -31,8 +31,9 @@ class SalarySlipMail extends Mailable
     public function envelope(): Envelope
     {
         $monthName = \Carbon\Carbon::parse($this->month)->format('F Y');
+
         return new Envelope(
-            subject: "Salary Slip for {$monthName} - " . config('app.name'),
+            subject: "Salary Slip for {$monthName} - ".config('app.name'),
         );
     }
 
@@ -58,6 +59,7 @@ class SalarySlipMail extends Mailable
     public function attachments(): array
     {
         $monthName = \Carbon\Carbon::parse($this->month)->format('Y-m');
+
         return [
             Attachment::fromStorage($this->pdfPath)
                 ->as("salary-slip-{$monthName}.pdf")

@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Mail\InterviewScheduledMail;
 use App\Mail\UpdatedEmployeeInformationMain;
 use App\Models\Department;
 use App\Models\User;
@@ -44,6 +43,7 @@ class EmployeeController extends Controller
     public function create()
     {
         $departments = Department::all();
+
         return view('profiles.create', compact('departments'));
     }
 
@@ -65,12 +65,14 @@ class EmployeeController extends Controller
         $validated['password'] = bcrypt($validated['password']);
 
         User::create($validated);
+
         return redirect()->route('profiles.index')->with('success', 'Profile created successfully.');
     }
 
     public function edit(User $employee)
     {
         $departments = Department::all();
+
         return view('profiles.edit', compact('employee', 'departments'));
     }
 
@@ -81,7 +83,7 @@ class EmployeeController extends Controller
             'surname' => 'required|string|max:255',
             'job_title' => 'nullable|string|max:255',
             'department_id' => 'required|exists:departments,id',
-            'email' => 'required|email|max:255|unique:users,email,' . $employee->id,
+            'email' => 'required|email|max:255|unique:users,email,'.$employee->id,
             'phone_number' => 'nullable|string|max:20',
             'address' => 'nullable|string|max:255',
             'status' => 'required|in:active,inactive',
@@ -90,8 +92,7 @@ class EmployeeController extends Controller
 
         $employee->update($validated);
 
-        if ($validated['send_email'] ?? false)
-        {
+        if ($validated['send_email'] ?? false) {
             Mail::to($employee->email)->send(
                 new UpdatedEmployeeInformationMain($employee)
             );

@@ -25,6 +25,7 @@ class SalaryController extends Controller
     public function index(): View
     {
         $salaryLogs = SalaryLog::with(['user', 'salaryComponents'])->latest()->paginate(10);
+
         return view('salaries.index', compact('salaryLogs'));
     }
 
@@ -34,6 +35,7 @@ class SalaryController extends Controller
     public function create(): View
     {
         $users = User::all();
+
         return view('salaries.create', compact('users'));
     }
 
@@ -81,6 +83,7 @@ class SalaryController extends Controller
     public function show(SalaryLog $salary): View
     {
         $salary->load(['user', 'salaryComponents']);
+
         return view('salaries.show', ['salaryLog' => $salary]);
     }
 
@@ -174,7 +177,7 @@ class SalaryController extends Controller
         $user = User::findOrFail($validated['user_id']);
         $reportData = $this->calculateMonthlyData($user, $validated['month']);
 
-        if (!$reportData) {
+        if (! $reportData) {
             return back()->with('error', 'No salary data found for this month.');
         }
 

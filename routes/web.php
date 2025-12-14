@@ -149,4 +149,4 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('company-structure/pdf', [CompanyStructureController::class, 'generatePdf'])->name('company-structure.pdf');
 });
 
-require __DIR__ . '/auth.php';
+require __DIR__.'/auth.php';

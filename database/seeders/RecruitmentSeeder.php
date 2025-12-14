@@ -325,9 +325,9 @@ class RecruitmentSeeder extends Seeder
 
         $this->command->info('Recruitment data seeded successfully!');
         $this->command->info('Created:');
-        $this->command->info('  - ' . count($jobPostings) . ' job postings');
-        $this->command->info('  - ' . count($candidates) . ' candidates');
-        $this->command->info('  - ' . count($interviews) . ' interviews');
+        $this->command->info('  - '.count($jobPostings).' job postings');
+        $this->command->info('  - '.count($candidates).' candidates');
+        $this->command->info('  - '.count($interviews).' interviews');
         $this->command->info('  - 3 job offers');
     }
 }

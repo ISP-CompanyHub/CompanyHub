@@ -4,14 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Models\Document;
 use App\Models\DocumentVersion;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\View\View;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
-use PhpOffice\PhpWord\IOFactory;
 use Barryvdh\DomPDF\Facade\Pdf;
-
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\View\View;
+use PhpOffice\PhpWord\IOFactory;
 
 class DocumentController extends Controller
 {
@@ -22,6 +21,7 @@ class DocumentController extends Controller
     {
         $documents = Document::latest('name')
             ->paginate(10);
+
         return view('documents.index', compact('documents'));
     }
 
@@ -48,7 +48,7 @@ class DocumentController extends Controller
         if ($request->hasFile('file')) {
 
             $file = $request->file('file');
-            $filename = time() . '_' . $file->getClientOriginalName();
+            $filename = time().'_'.$file->getClientOriginalName();
             $extension = $file->getClientOriginalExtension();
 
             if ($extension === 'docx' && $request->convert == 1) {
@@ -105,12 +105,11 @@ class DocumentController extends Controller
             'convert' => 'nullable|boolean',
         ]);
 
-
         $extension = $document->type;
 
         if ($request->hasFile('file')) {
             $file = $request->file('file');
-            $filename = time() . '_' . $file->getClientOriginalName();
+            $filename = time().'_'.$file->getClientOriginalName();
             $extension = $file->getClientOriginalExtension();
 
             if ($extension === 'docx' && $request->convert == 1) {
@@ -130,12 +129,12 @@ class DocumentController extends Controller
         }
 
         $document->versions()->latest('version_number')->first()->update([
-            'comment' => $request->input('comment')
+            'comment' => $request->input('comment'),
         ]);
 
         $document->update([
             'name' => $request->input('name'),
-            'type' => $extension
+            'type' => $extension,
         ]);
 
         return redirect()
@@ -167,12 +166,13 @@ class DocumentController extends Controller
     {
         $latestVersion = $document->versions()->latest('version_number')->first();
 
-        if (!$latestVersion) {
+        if (! $latestVersion) {
             abort(404, 'File not found.');
         }
 
-        return Storage::disk('public')->download($latestVersion->file_url, $document->name . '.' . $document->type);
+        return Storage::disk('public')->download($latestVersion->file_url, $document->name.'.'.$document->type);
     }
+
     public function convertToPDF($file, $filename)
     {
         $phpWord = IOFactory::load($file->getPathname());
@@ -183,9 +183,9 @@ class DocumentController extends Controller
 
         $pdf = Pdf::loadHTML($htmlContent);
 
-        $pdfFilename = pathinfo($filename, PATHINFO_FILENAME) . '.pdf';
-        $filePath = 'documents/' . $pdfFilename;
-        $pdf->save(storage_path('app/public/' . $filePath));
+        $pdfFilename = pathinfo($filename, PATHINFO_FILENAME).'.pdf';
+        $filePath = 'documents/'.$pdfFilename;
+        $pdf->save(storage_path('app/public/'.$filePath));
 
         return $filePath;
     }

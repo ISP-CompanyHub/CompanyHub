@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Holiday;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\View\View;
@@ -19,6 +18,7 @@ class HolidayController extends Controller
     public function index()
     {
         $holidays = Holiday::paginate(15);
+
         return view('vacation.holiday', compact('holidays'));
     }
 
