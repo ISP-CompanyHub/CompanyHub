@@ -27,7 +27,7 @@
                             <option value="">{{ __('Select a candidate') }}</option>
                             @foreach ($candidates as $candidate)
                                 <option value="{{ $candidate->id }}"
-                                    {{ old('candidate_id', request('candidate_id')) == $candidate->id ? 'selected' : '' }}>
+                                    {{ old('candidate_id', $selectedCandidateId) == $candidate->id ? 'selected' : '' }}>
                                     {{ $candidate->name }} - {{ $candidate->jobPosting->title }}
                                 </option>
                             @endforeach

@@ -6,6 +6,22 @@
             <span class="mx-2">/</span>
             <span>{{ $jobOffer->offer_number }}</span>
         </div>
+        <div class="bg-blue-50 dark:bg-blue-900/20 border-l-4 border-blue-400 p-4 mb-4">
+            <div class="flex">
+                <div class="flex-shrink-0">
+                    <svg class="h-5 w-5 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd"
+                            d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
+                            clip-rule="evenodd" />
+                    </svg>
+                </div>
+                <div class="ml-3">
+                    <p class="text-sm text-blue-700 dark:text-blue-300">
+                        {{ __('This feature was added beyond the original project scope.') }}
+                    </p>
+                </div>
+            </div>
+        </div>
         <div class="flex justify-between items-start">
             <div>
                 <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">{{ __('Job Offer') }}
@@ -163,17 +179,6 @@
                         class="block w-full bg-blue-600 hover:bg-blue-700 text-white text-center px-4 py-2 rounded-lg">
                         {{ __('Download PDF') }}
                     </a>
-
-                    @if ($jobOffer->status === 'draft')
-                        <form action="{{ route('job-offers.send', $jobOffer) }}" method="POST"
-                            onsubmit="return confirm('{{ __('Are you sure you want to send this job offer? The candidate will receive it via email.') }}')">
-                            @csrf
-                            <button type="submit"
-                                class="block w-full bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg">
-                                {{ __('Send Offer via Email') }}
-                            </button>
-                        </form>
-                    @endif
                 </div>
             </div>
         </div>

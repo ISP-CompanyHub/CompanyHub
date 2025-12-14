@@ -19,30 +19,29 @@ class RolePermissionSeeder extends Seeder
         // Create permissions
         $permissions = [
             // Job Postings
-            'view job postings',
+            'view job postings', // Not part of use case diagram, but added for completeness
             'create job postings',
-            'edit job postings',
-            'delete job postings',
+            'edit job postings', // Not part of use case diagram, but added for completeness
+            'delete job postings', // Not part of use case diagram, but added for completeness
 
             // Candidates
             'view candidates',
-            'create candidates',
+            'create candidates', // Not part of use case diagram, but added for completeness
             'edit candidates',
-            'delete candidates',
-            'update candidate status',
+            'delete candidates', // Not part of use case diagram, but added for completeness
+            'update candidate status', // Not part of use case diagram, but added for completeness
 
             // Interviews
-            'view interviews',
+            'view interviews', // Not part of use case diagram, but added for completeness
             'schedule interviews',
-            'edit interviews',
-            'delete interviews',
+            'edit interviews', // Not part of use case diagram, but added for completeness
+            'delete interviews', // Not part of use case diagram, but added for completeness
 
             // Job Offers
-            'view job offers',
+            'view job offers', // Not part of use case diagram, but added for completeness
             'create job offers',
-            'send job offers',
-            'edit job offers',
-            'delete job offers',
+            'edit job offers', // Not part of use case diagram, but added for completeness
+            'delete job offers', // Not part of use case diagram, but added for completeness
 
             // Documents
             'view documents',
@@ -141,8 +140,8 @@ class RolePermissionSeeder extends Seeder
             'view employees',
             'edit employee profile',
             'create employee profile',
-          
-            'generate company structure'
+
+            'generate company structure',
         ]);
 
         // Manager role - can do everything (sync all existing permissions)

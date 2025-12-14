@@ -58,6 +58,8 @@ test('managers can view job offers index', function () {
 test('managers can create job offer', function () {
     $this->actingAs($this->manager);
 
+    Mail::fake();
+
     $data = [
         'candidate_id' => $this->candidate->id,
         'job_posting_id' => $this->jobPosting->id,
@@ -74,11 +76,28 @@ test('managers can create job offer', function () {
     $this->assertDatabaseHas('job_offers', [
         'candidate_id' => $this->candidate->id,
         'salary' => 75000,
-        'status' => 'draft',
+        'status' => 'sent',
     ]);
 
     // Check offer number was generated
     expect($jobOffer->offer_number)->toStartWith('JO-');
+
+    // Verify candidate status updated
+    $this->assertDatabaseHas('candidates', [
+        'id' => $this->candidate->id,
+        'status' => 'offer_sent',
+    ]);
+
+    // Verify email was sent
+    Mail::assertSent(JobOfferMail::class, function ($mail) use ($jobOffer) {
+        return $mail->jobOffer->id === $jobOffer->id
+            && $mail->hasTo($this->candidate->email);
+    });
+
+    // Verify PDF was generated
+    $jobOffer->refresh();
+    expect($jobOffer->pdf_path)->not->toBeNull();
+    expect($jobOffer->sent_at)->not->toBeNull();
 });
 
 test('job offer requires candidate', function () {
@@ -193,62 +212,6 @@ test('managers can download job offer PDF', function () {
     $response->assertOk();
     $response->assertHeader('Content-Type', 'application/pdf');
     $response->assertHeader('Content-Disposition');
-});
-
-test('managers can send job offer via email', function () {
-    $this->actingAs($this->manager);
-
-    Mail::fake();
-
-    $jobOffer = JobOffer::factory()->draft()->create([
-        'candidate_id' => $this->candidate->id,
-        'job_posting_id' => $this->jobPosting->id,
-    ]);
-
-    $response = $this->post(route('job-offers.send', $jobOffer));
-
-    $response->assertRedirect(route('job-offers.show', $jobOffer));
-
-    // Verify job offer status updated
-    $this->assertDatabaseHas('job_offers', [
-        'id' => $jobOffer->id,
-        'status' => 'sent',
-    ]);
-
-    // Verify candidate status updated
-    $this->assertDatabaseHas('candidates', [
-        'id' => $this->candidate->id,
-        'status' => 'offer_sent',
-    ]);
-
-    // Verify email was sent
-    Mail::assertSent(JobOfferMail::class, function ($mail) use ($jobOffer) {
-        return $mail->jobOffer->id === $jobOffer->id
-            && $mail->hasTo($this->candidate->email);
-    });
-
-    // Verify PDF was generated
-    $jobOffer->refresh();
-    expect($jobOffer->pdf_path)->not->toBeNull();
-    expect($jobOffer->sent_at)->not->toBeNull();
-});
-
-test('managers cannot send job offer twice', function () {
-    $this->actingAs($this->manager);
-
-    Mail::fake();
-
-    $jobOffer = JobOffer::factory()->sent()->create([
-        'candidate_id' => $this->candidate->id,
-        'job_posting_id' => $this->jobPosting->id,
-    ]);
-
-    $response = $this->post(route('job-offers.send', $jobOffer));
-
-    $response->assertRedirect();
-    $response->assertSessionHas('error');
-
-    Mail::assertNothingSent();
 });
 
 test('managers can delete job offer', function () {

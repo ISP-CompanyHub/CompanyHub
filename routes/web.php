@@ -6,12 +6,10 @@ use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\HolidayController;
-use App\Http\Controllers\InterviewController;
-use App\Http\Controllers\JobOfferController;
 use App\Http\Controllers\JobPostingController;
+use App\Http\Controllers\SalaryController;
 use App\Http\Controllers\Settings;
 use App\Http\Controllers\VacationController;
-use App\Http\Controllers\SalaryController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -60,18 +58,28 @@ Route::middleware(['auth', 'verified', 'role:administrator|manager'])->group(fun
     Route::patch('candidates/{candidate}/status', [CandidateController::class, 'updateStatus'])
         ->name('candidates.update-status');
 
-    // Interviews
-    Route::resource('interviews', InterviewController::class);
+    // Interviews (handled by CandidateController)
+    Route::get('interviews', [CandidateController::class, 'interviewIndex'])->name('interviews.index');
+    Route::get('interviews/create', [CandidateController::class, 'interviewCreate'])->name('interviews.create');
+    Route::post('interviews', [CandidateController::class, 'interviewStore'])->name('interviews.store');
+    Route::get('interviews/{interview}', [CandidateController::class, 'interviewShow'])->name('interviews.show');
+    Route::get('interviews/{interview}/edit', [CandidateController::class, 'interviewEdit'])->name('interviews.edit');
+    Route::put('interviews/{interview}', [CandidateController::class, 'interviewUpdate'])->name('interviews.update');
+    Route::delete('interviews/{interview}', [CandidateController::class, 'interviewDestroy'])->name('interviews.destroy');
 });
 
-// Job Offers (Manager only)
+// Job Offers (Manager only) - handled by JobPostingController
 Route::middleware(['auth', 'verified', 'role:manager'])->group(function () {
-    Route::resource('job-offers', JobOfferController::class);
-    Route::get('job-offers/{jobOffer}/preview', [JobOfferController::class, 'preview'])
+    Route::get('job-offers', [JobPostingController::class, 'offerIndex'])->name('job-offers.index');
+    Route::get('job-offers/create', [JobPostingController::class, 'offerCreate'])->name('job-offers.create');
+    Route::post('job-offers', [JobPostingController::class, 'offerStore'])->name('job-offers.store');
+    Route::get('job-offers/{jobOffer}', [JobPostingController::class, 'offerShow'])->name('job-offers.show');
+    Route::get('job-offers/{jobOffer}/edit', [JobPostingController::class, 'offerEdit'])->name('job-offers.edit');
+    Route::put('job-offers/{jobOffer}', [JobPostingController::class, 'offerUpdate'])->name('job-offers.update');
+    Route::delete('job-offers/{jobOffer}', [JobPostingController::class, 'offerDestroy'])->name('job-offers.destroy');
+    Route::get('job-offers/{jobOffer}/preview', [JobPostingController::class, 'offerPreview'])
         ->name('job-offers.preview');
-    Route::post('job-offers/{jobOffer}/send', [JobOfferController::class, 'send'])
-        ->name('job-offers.send');
-    Route::get('job-offers/{jobOffer}/download', [JobOfferController::class, 'download'])
+    Route::get('job-offers/{jobOffer}/download', [JobPostingController::class, 'offerDownload'])
         ->name('job-offers.download');
 });
 
@@ -89,7 +97,7 @@ Route::middleware(['auth'])->group(function () {
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/documents/{document}/download', [DocumentController::class, 'download'])
-    ->name('documents.download');
+        ->name('documents.download');
 });
 
 // Vacations
@@ -141,4 +149,4 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('company-structure/pdf', [CompanyStructureController::class, 'generatePdf'])->name('company-structure.pdf');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
